@@ -1,17 +1,22 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { useFSStore } from './store/useFSStore'
-import { useMockLandmarks } from './hooks/useMockLandmarks'
+import { useMediaPipe } from './hooks/useMediaPipe'
 
 function App() {
-  useMockLandmarks()
+  const videoRef = useRef<HTMLVideoElement>(null)
+  useMediaPipe(videoRef)
+
   const yaw = useFSStore((state) => state.headPose?.yaw?.toFixed(1) ?? 'waiting...')
   const [count, setCount] = useState(0)
 
   return (
     <>
+      {/* hidden video element — MediaPipe reads frames from this */}
+      <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
+
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -32,7 +37,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <p>Mock Yaw: {yaw}°</p>
+      <p>Yaw: {yaw}°</p>
     </>
   )
 }
