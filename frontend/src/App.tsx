@@ -3,8 +3,11 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { useFSStore } from './store/useFSStore'
+import { useMockLandmarks } from './hooks/useMockLandmarks'
 
 function App() {
+  useMockLandmarks()
+  const yaw = useFSStore((state) => state.headPose?.yaw?.toFixed(1) ?? 'waiting...')
   const [count, setCount] = useState(0)
 
   return (
@@ -29,6 +32,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <p>Mock Yaw: {yaw}°</p>
     </>
   )
 }
