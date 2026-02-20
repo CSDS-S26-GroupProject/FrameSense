@@ -1,0 +1,20 @@
+[
+    {
+        "id": "aviator-001",
+        "name": "Classic Aviator",
+        "style": "aviator",
+        "frameWidthMm": 140,
+        "bridgeWidthMm": 18,
+        "templeLengthMm": 140,
+        "colors": [
+            "gold",
+            "silver"
+        ],
+        "recommendedShapes": [
+            "oval",
+            "heart"
+        ],
+        "modelPath": "/models/aviator-001.glb",
+        "thumbnailPath": "/thumbnails/aviator-001.png"
+    }
+]
