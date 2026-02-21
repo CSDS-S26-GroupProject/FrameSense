@@ -16,7 +16,7 @@ function GlassesMesh({ modelPath }: GlassesMeshProps) {
   const { size } = useThree()
 
   const noseBridge = useFSStore((s) => s.noseBridge)
-  const headPose   = useFSStore((s) => s.headPose)
+  const headPose = useFSStore((s) => s.headPose)
 
   // log bounding box once so Team 3 can read real model dimensions
   useEffect(() => {
@@ -34,11 +34,11 @@ function GlassesMesh({ modelPath }: GlassesMeshProps) {
     // Three.js canvas has origin center, y-axis up.
     // Map: x: [0,1] → [-aspect/2, aspect/2], y: [0,1] → [0.5, -0.5]
     const aspect = size.width / size.height
-    const x =  (noseBridge.x - 0.5) * aspect
-    const y = -(noseBridge.y - 0.5)
+    const x = (noseBridge.x - 0.5) * aspect
+    const y = -(noseBridge.y - 0.5) - 0.06
 
     // z depth: bring glasses slightly in front of the "face plane"
-    const z = 0.5 + noseBridge.z * -0.3
+    const z = 0.3 + noseBridge.z * -1.5
 
     meshRef.current.position.set(x, y, z)
 
@@ -50,7 +50,7 @@ function GlassesMesh({ modelPath }: GlassesMeshProps) {
     )
   })
 
-  return <primitive ref={meshRef} object={scene} scale={0.1} />
+  return <primitive ref={meshRef} object={scene} scale={1.0} />
 }
 
 // ── Fallback shown while GLB is loading ────────────────────────────────────
@@ -68,7 +68,7 @@ function LoadingFallback() {
 
 export default function GlassesCanvas() {
   const selectedId = useFSStore((s) => s.selectedGlassesId)
-  const catalog    = useFSStore((s) => s.catalog)
+  const catalog = useFSStore((s) => s.catalog)
   const noseBridge = useFSStore((s) => s.noseBridge)
 
   const selectedFrame = catalog.find((f) => f.id === selectedId)
@@ -84,7 +84,8 @@ export default function GlassesCanvas() {
         left: 0,
         width: '100%',
         height: '100%',
-        pointerEvents: 'none', // clicks pass through to video beneath
+        pointerEvents: 'none',
+        transform: 'scaleX(-1)', // clicks pass through to video beneath
       }}
       camera={{ fov: 60, near: 0.01, far: 100, position: [0, 0, 1] }}
     >
