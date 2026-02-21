@@ -1,4 +1,5 @@
 import { useFSStore } from '../store/useFSStore'
+import GlassesCanvas from './GlassesCanvas'
 
 interface CameraFeedProps {
     videoRef: React.RefObject<HTMLVideoElement | null>
@@ -22,6 +23,9 @@ export default function CameraFeed({ videoRef }: CameraFeedProps) {
                 muted
                 className="camera-video"
             />
+
+            {/* 3D glasses overlay — sits on top of the video */}
+            <GlassesCanvas />
 
             {fitScore !== null && (
                 <div className="fit-badge">

@@ -1,20 +1,38 @@
 [
     {
-        "id": "aviator-001",
-        "name": "Classic Aviator",
-        "style": "aviator",
-        "frameWidthMm": 140,
+        "id": "standard-001",
+        "name": "Standard Glasses",
+        "style": "classic",
+        "frameWidthMm": 138,
         "bridgeWidthMm": 18,
         "templeLengthMm": 140,
-        "colors": [
-            "gold",
-            "silver"
-        ],
-        "recommendedShapes": [
-            "oval",
-            "heart"
-        ],
-        "modelPath": "/models/aviator-001.glb",
-        "thumbnailPath": "/thumbnails/aviator-001.png"
+        "colors": ["black", "brown"],
+        "recommendedShapes": ["oval", "round", "square"],
+        "modelPath": "/models/standard_glasses.glb",
+        "thumbnailPath": "/thumbnails/standard_glasses.png"
+    },
+    {
+        "id": "meta-oakley-001",
+        "name": "Meta Oakley",
+        "style": "sport",
+        "frameWidthMm": 145,
+        "bridgeWidthMm": 20,
+        "templeLengthMm": 145,
+        "colors": ["black", "grey"],
+        "recommendedShapes": ["oval", "diamond", "square"],
+        "modelPath": "/models/meta_oaklay.glb",
+        "thumbnailPath": "/thumbnails/meta_oaklay.png"
+    },
+    {
+        "id": "cat-eye-001",
+        "name": "Cat Eye",
+        "style": "cat-eye",
+        "frameWidthMm": 135,
+        "bridgeWidthMm": 16,
+        "templeLengthMm": 138,
+        "colors": ["tortoise", "black"],
+        "recommendedShapes": ["round", "square", "heart"],
+        "modelPath": "/models/cat_eye.glb",
+        "thumbnailPath": "/thumbnails/cat_eye.png"
     }
 ]
