@@ -70,14 +70,26 @@ Make sure you have the following installed:
    cd FrameSense
    ```
 
-2. **Install frontend dependencies**
+2. **Using Docker (Recommended)**
+
+   Ensure you have Docker and Docker Compose installed.
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   The app will be available at [http://localhost:5173](http://localhost:5173).
+
+3. **Manual Installation**
+
+   **Install frontend dependencies**
 
    ```bash
    cd frontend
    npm install
    ```
 
-3. **Start the development server**
+   **Start the development server**
 
    ```bash
    npm run dev
