@@ -34,5 +34,17 @@
         "recommendedShapes": ["round", "square", "heart"],
         "modelPath": "/models/cat_eye.glb",
         "thumbnailPath": "/thumbnails/cat_eye.png"
+    },
+    {
+        "id": "round-gold-001",
+        "name": "Round Gold",
+        "style": "Round, Wired",
+        "frameWidthMm": 128,
+        "bridgeWidthMm": 21,
+        "templeLengthMm": 145,
+        "colors": ["gold"],
+        "recommendedShapes": ["round", "square", "heart"],
+        "modelPath": "/models/julian_glasses.glb",
+        "thumbnailPath": "/thumbnails/cat_eye.png"
     }
 ]
