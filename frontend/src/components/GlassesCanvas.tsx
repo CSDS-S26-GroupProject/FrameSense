@@ -1,31 +1,45 @@
-import { Suspense, useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useFSStore } from '../store/useFSStore'
+import type { GlassesFrame } from '../types/contract'
 
 // ── Glasses mesh: loads GLB and tracks face each frame ──────────────────────
 
 interface GlassesMeshProps {
   modelPath: string
+  selectedFrame: GlassesFrame
 }
 
-function GlassesMesh({ modelPath }: GlassesMeshProps) {
+function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
   const { scene } = useGLTF(modelPath)
   const meshRef = useRef<THREE.Group>(null)
   const { size } = useThree()
 
   const noseBridge = useFSStore((s) => s.noseBridge)
   const headPose = useFSStore((s) => s.headPose)
+  const leftPupil = useFSStore((s) => s.leftPupil)
+  const rightPupil = useFSStore((s) => s.rightPupil)
 
   // log bounding box once so Team 3 can read real model dimensions
-  useEffect(() => {
+  const scale = useMemo(() => {
+    const box = new THREE.Box3().setFromObject(scene)
+    const dimensions = new THREE.Vector3()
+    box.getSize(dimensions)
+    const modelWidthUnits = dimensions.x          // bounding box width
+    const targetWidthM = selectedFrame.frameWidthMm / 1000  // mm → meters
+    return targetWidthM / modelWidthUnits
+  }, [scene, selectedFrame.frameWidthMm])
+  
+  /*useEffect(() => {
     const box = new THREE.Box3().setFromObject(scene)
     const dimensions = new THREE.Vector3()
     box.getSize(dimensions)
     console.log(`[GlassesCanvas] ${modelPath} bounding box (units):`, dimensions)
     console.log(`[GlassesCanvas] Assuming 1 unit = 1m → width: ${(dimensions.x * 1000).toFixed(1)}mm`)
-  }, [scene, modelPath])
+  }, [scene, modelPath])*/
+  
 
   useFrame(() => {
     if (!meshRef.current || !noseBridge || !headPose) return
@@ -38,7 +52,7 @@ function GlassesMesh({ modelPath }: GlassesMeshProps) {
     const y = -(noseBridge.y - 0.5) - 0.06
 
     // z depth: bring glasses slightly in front of the "face plane"
-    const z = 0.3 + noseBridge.z * -1.5
+    const z = noseBridge.z +0.3//0.3 + noseBridge.z * -1.5
 
     meshRef.current.position.set(x, y, z)
 
@@ -46,11 +60,21 @@ function GlassesMesh({ modelPath }: GlassesMeshProps) {
     meshRef.current.rotation.set(
       THREE.MathUtils.degToRad(headPose.pitch),
       THREE.MathUtils.degToRad(headPose.yaw),
-      THREE.MathUtils.degToRad(headPose.roll)
+      THREE.MathUtils.degToRad(-headPose.roll)
     )
-  })
 
-  return <primitive ref={meshRef} object={scene} scale={1.0} />
+    //Scale in the z direction
+    if (leftPupil && rightPupil) {
+    const ipd = Math.sqrt(
+        Math.pow(rightPupil.x - leftPupil.x, 2) +
+        Math.pow(rightPupil.y - leftPupil.y, 2)
+    )
+    const BASE_IPD = 0.18
+    meshRef.current.scale.setScalar(scale * (ipd / BASE_IPD))
+    }
+  })
+  return <primitive ref={meshRef} object={scene} scale={scale} />
+  //return <primitive ref={meshRef} object={scene} scale={1.0} /> //was 1.0
 }
 
 // ── Fallback shown while GLB is loading ────────────────────────────────────
@@ -92,7 +116,7 @@ export default function GlassesCanvas() {
       <ambientLight intensity={1.2} />
       <directionalLight position={[0, 2, 2]} intensity={1} />
       <Suspense fallback={<LoadingFallback />}>
-        <GlassesMesh modelPath={selectedFrame.modelPath} />
+        <GlassesMesh modelPath={selectedFrame.modelPath} selectedFrame={selectedFrame} />
       </Suspense>
     </Canvas>
   )
