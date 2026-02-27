@@ -9,6 +9,8 @@ export const useFSStore = create<FrameSenseState>((set) => ({
     noseBridge: null,
     leftPupil: null,
     rightPupil: null,
+    leftEarTop: null,
+    rightEarTop: null,
     faceShape: null,
     selectedGlassesId: null,
     catalog: catalogData as GlassesFrame[],
@@ -18,9 +20,11 @@ export const useFSStore = create<FrameSenseState>((set) => ({
     // actions
     setLandmarks: (landmarks) => set({
         rawLandmarks: landmarks,
-        noseBridge: landmarks[6],
+        noseBridge: landmarks[6], //was 6
         leftPupil: landmarks[468],
         rightPupil: landmarks[473],
+        leftEarTop: landmarks[356],
+        rightEarTop: landmarks[127],
     }),
     setHeadPose: (pose) => set({ headPose: pose }),
     selectGlasses: (id) => set({ selectedGlassesId: id }),

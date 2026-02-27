@@ -21,24 +21,27 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
   const headPose = useFSStore((s) => s.headPose)
   const leftPupil = useFSStore((s) => s.leftPupil)
   const rightPupil = useFSStore((s) => s.rightPupil)
+  const leftEarTop  = useFSStore((s) => s.leftEarTop)
+  const rightEarTop = useFSStore((s) => s.rightEarTop)
+
 
   // log bounding box once so Team 3 can read real model dimensions
-  const scale = useMemo(() => {
+  /**const scale = useMemo(() => {
     const box = new THREE.Box3().setFromObject(scene)
     const dimensions = new THREE.Vector3()
     box.getSize(dimensions)
     const modelWidthUnits = dimensions.x          // bounding box width
     const targetWidthM = selectedFrame.frameWidthMm / 1000  // mm → meters
     return targetWidthM / modelWidthUnits
-  }, [scene, selectedFrame.frameWidthMm])
+  }, [scene, selectedFrame.frameWidthMm])*/
   
-  /*useEffect(() => {
+  useEffect(() => {
     const box = new THREE.Box3().setFromObject(scene)
     const dimensions = new THREE.Vector3()
     box.getSize(dimensions)
     console.log(`[GlassesCanvas] ${modelPath} bounding box (units):`, dimensions)
     console.log(`[GlassesCanvas] Assuming 1 unit = 1m → width: ${(dimensions.x * 1000).toFixed(1)}mm`)
-  }, [scene, modelPath])*/
+  }, [scene, modelPath])
   
 
   useFrame(() => {
@@ -49,10 +52,10 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
     // Map: x: [0,1] → [-aspect/2, aspect/2], y: [0,1] → [0.5, -0.5]
     const aspect = size.width / size.height
     const x = (noseBridge.x - 0.5) * aspect
-    const y = -(noseBridge.y - 0.5) - 0.06
+    const y = -(noseBridge.y -.5)* aspect//-(noseBridge.y - 0.5) - 0.03
 
     // z depth: bring glasses slightly in front of the "face plane"
-    const z = noseBridge.z +0.3//0.3 + noseBridge.z * -1.5
+    const z = noseBridge.z//0.3 + noseBridge.z * -1.5
 
     meshRef.current.position.set(x, y, z)
 
@@ -65,15 +68,15 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
 
     //Scale in the z direction
     if (leftPupil && rightPupil) {
-    const ipd = Math.sqrt(
+    const dist_away = Math.sqrt(
         Math.pow(rightPupil.x - leftPupil.x, 2) +
         Math.pow(rightPupil.y - leftPupil.y, 2)
     )
-    const BASE_IPD = 0.18
-    meshRef.current.scale.setScalar(scale * (ipd / BASE_IPD))
+    const suggested_dist_away = 0.05
+    meshRef.current.scale.setScalar(1.0 * (dist_away/ suggested_dist_away)) //change 1.0 to scale IF useMemo is uncommented. If useEffect is uncommented, use 1.0
     }
   })
-  return <primitive ref={meshRef} object={scene} scale={scale} />
+  return <primitive ref={meshRef} object={scene} scale={1.0} />
   //return <primitive ref={meshRef} object={scene} scale={1.0} /> //was 1.0
 }
 

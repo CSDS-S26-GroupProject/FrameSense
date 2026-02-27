@@ -6,6 +6,7 @@ import GlassesSidebar from './components/GlassesSidebar'
 import LandmarkDebug from './components/LandmarkDebug'
 
 
+
 function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
   useMediaPipe(videoRef)
@@ -19,6 +20,7 @@ function App() {
         <LandmarkDebug />
         <CameraFeed videoRef={videoRef} />
         <GlassesSidebar />
+        <LandmarkDebug />
       </main>
     </div>
   )
