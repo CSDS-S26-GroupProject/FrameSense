@@ -85,7 +85,7 @@ export default function GlassesCanvas() {
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        transform: 'scaleX(-1)', // clicks pass through to video beneath
+        transform: 'scaleX(-1)',
       }}
       camera={{ fov: 60, near: 0.01, far: 100, position: [0, 0, 1] }}
     >
