@@ -62,12 +62,12 @@ Your dataset folder must follow this structure:
 ```
 dataset/
 │
-├── class_1/
+├── heart/
 │   ├── img1.jpg
 │   ├── img2.jpg
 │   └── ...
 │
-├── class_2/
+├── square/
 │   ├── img1.jpg
 │   ├── img2.jpg
 │   └── ...
@@ -200,4 +200,4 @@ your_script.py
 
 ---
 
-If you would like a shorter academic submission version or a more technical research-style version, I can provide that as well.
+
