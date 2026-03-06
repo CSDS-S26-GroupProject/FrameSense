@@ -68,6 +68,25 @@
   letter-spacing: -0.02em;
 }
 
+.auth-button {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-button:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+}
+
 .app-main {
   flex: 1;
   display: grid;
