@@ -230,6 +230,19 @@ Outputs:
 
 ---
 
+## Results
+
+The models were evaluated using a held-out test set and 5-fold cross-validation.
+
+| Model | Test Accuracy | Mean Cross-Validation Accuracy |
+|------|------|------|
+| Random Forest | 0.534 | — |
+| PCA (100) + SVM | 0.678 | 0.652 |
+
+The PCA + SVM classifier significantly outperformed the Random Forest baseline. Dimensionality reduction using PCA helps remove noise and redundant information from the high-dimensional landmark feature space, allowing the SVM classifier to better separate the face shape classes.
+
+---
+
 ## Confusion Matrix
 
 A heatmap is generated showing classification performance across classes.
@@ -237,7 +250,7 @@ A heatmap is generated showing classification performance across classes.
 * X-axis: Predicted labels
 * Y-axis: True labels
 * Color intensity indicates frequency
-
+  
 ---
 
 ## Evaluation Metrics
