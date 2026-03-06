@@ -85,6 +85,7 @@ This approach simplifies preprocessing and ensures that the dataset can be easil
 
 ### Original Dataset Structure (Kaggle)
 
+```
 dataset_original/
 │
 ├── train/
@@ -161,6 +162,7 @@ You must also download:
 
 ### Project Structure
 
+```
 project_root/
 │
 ├── dataset/
