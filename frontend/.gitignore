@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 .env
+.env.local
+.env.*.local
+
+# pnpm
+.pnpm-store
+pnpm-lock.yaml
+
 
 # Editor directories and files
 .vscode/*
