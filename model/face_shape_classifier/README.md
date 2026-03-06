@@ -99,7 +99,7 @@ dataset_original/
 │ ├── square/
 │ ├── oval/
 │ └── round/
-
+```
 
 ### Modified Dataset Structure (Used in This Project)
 
@@ -127,6 +127,7 @@ dataset/
 │   ├── img1.jpg
 │   ├── img2.jpg
 │   └── ...
+```
 
 Each folder name represents the **label used for classification**.
 
@@ -174,7 +175,7 @@ project_root/
 ├── face_landmarker.task
 ├── train_face_shape.py
 └── README.md
-
+```
 ---
 
 ## Running the Script
