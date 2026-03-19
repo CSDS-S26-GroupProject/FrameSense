@@ -4,6 +4,9 @@ import { useMediaPipe } from './hooks/useMediaPipe'
 import CameraFeed from './components/CameraFeed'
 import GlassesSidebar from './components/GlassesSidebar'
 import LandmarkDebug from './components/LandmarkDebug'
+import DistanceIndicator from './components/DistanceIndicator'
+import LandmarkMesh from './components/LandmarkMesh'
+
 
 
 
@@ -17,10 +20,11 @@ function App() {
         <h1>FrameSense</h1>
       </header>
       <main className="app-main">
-        <LandmarkDebug />
-        <CameraFeed videoRef={videoRef} />
+        <div className="camera-container">  {/** wraps the stuff laid on the camera image since there is a dimension difference from the logo at the top and the glasses sidebar (from the app.css file) */}
+            <CameraFeed videoRef={videoRef} />
+        </div>
         <GlassesSidebar />
-        <LandmarkDebug />
+        <DistanceIndicator />
       </main>
     </div>
   )

@@ -52,7 +52,8 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
     // Map: x: [0,1] → [-aspect/2, aspect/2], y: [0,1] → [0.5, -0.5]
     const aspect = size.width / size.height
     const x = (noseBridge.x - 0.5) * aspect
-    const y = -(noseBridge.y -.5) * aspect -.1//-(noseBridge.y - 0.5) - 0.03
+    const y = -(noseBridge.y -.5) //* aspect -.1//-(noseBridge.y - 0.5) - 0.03
+    
 
     // z depth: bring glasses slightly in front of the "face plane"
     const z = noseBridge.z - .5//0.3 + noseBridge.z * -1.5
