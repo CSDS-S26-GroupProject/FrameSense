@@ -28,7 +28,6 @@ export default function CameraFeed({ videoRef }: CameraFeedProps) {
 
             {/* 3D glasses overlay — sits on top of the video */}
             <GlassesCanvas />
-            <LandmarkMesh />
 
             {fitScore !== null && (
                 <div className="fit-badge">

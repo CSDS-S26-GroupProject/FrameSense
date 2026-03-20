@@ -52,11 +52,9 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
     // Map: x: [0,1] → [-aspect/2, aspect/2], y: [0,1] → [0.5, -0.5]
     const aspect = size.width / size.height
     const x = (noseBridge.x - 0.5) * aspect
-    const y = -(noseBridge.y -.5) //* aspect -.1//-(noseBridge.y - 0.5) - 0.03
-    
-
+    const y = -(noseBridge.y -.5)//* aspect -.1//-(noseBridge.y - 0.5) - 0.03
     // z depth: bring glasses slightly in front of the "face plane"
-    const z = noseBridge.z - .5//0.3 + noseBridge.z * -1.5
+    const z = noseBridge.z -1 //0.3 + noseBridge.z * -1.5
 
     // apply head rotation from MediaPipe transformation matrix
     meshRef.current.rotation.set(
@@ -64,28 +62,24 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
       THREE.MathUtils.degToRad(headPose.yaw),
       THREE.MathUtils.degToRad(-headPose.roll)
     )
-    
-    meshRef.current.position.set(x, y, z)
 
-
-    //Scaling based on the ears
-    if (leftEarTop && rightEarTop) {
-    const earDistPixels = Math.sqrt(
-      Math.pow(rightEarTop.x - leftEarTop.x, 2) +
-      Math.pow(rightEarTop.y - leftEarTop.y, 2)
-    )
-
-    // YOUR_MODEL_EAR_SPAN: measure from your GLB's bounding box log.
-    // It's the fraction of the model width that spans ear-to-ear (usually 0.9–1.0 ish)
-    const MODEL_EAR_SPAN_NORMALIZED = 0.15
-
-    // earDistPixels is in normalized [0,1] space; convert to Three.js units
-    const earDistThree = earDistPixels * aspect
-    const scale = earDistThree / MODEL_EAR_SPAN_NORMALIZED
-
-    //meshRef.current.scale.setScalar(scale)
-    meshRef.current.scale.setScalar(scale * (earDistThree / MODEL_EAR_SPAN_NORMALIZED))
-
+    //Scaling the width of the glasses based on the ears
+if (leftEarTop && rightEarTop) {
+  // Calculate ear distance in normalized space
+  const earDistNormalized = Math.sqrt(
+    Math.pow(rightEarTop.x - leftEarTop.x, 2) +
+    Math.pow(rightEarTop.y - leftEarTop.y, 2)
+  )
+  
+  // Convert to Three.js units
+  const earDistThree = earDistNormalized * aspect
+  
+  // Your glasses model's actual ear-to-ear span (measure from bounding box)
+  const modelEarSpan = 0.08 // Adjust this based on your actual model
+  
+  const scale = earDistThree / modelEarSpan
+  meshRef.current.scale.setScalar(scale)
+}
 
     // ── Vertical offset: nudge glasses DOWN so nose pad sits on bridge ──
     // NOSE_BRIDGE_OFFSET_FRACTION: how far the nose bridge is from the
@@ -97,8 +91,7 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
     // Shift position so nose pad aligns with landmark instead of model center
     const offsetY = modelHeight * NOSE_BRIDGE_OFFSET_FRACTION
     meshRef.current.position.set(x, y + offsetY, z)
-  }  
-})
+  })
 
 
     /*//Scale in the z direction
