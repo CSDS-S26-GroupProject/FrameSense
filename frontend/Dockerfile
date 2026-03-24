@@ -16,10 +16,12 @@ FROM base AS dev
 COPY . .
 EXPOSE 5173
 CMD ["pnpm", "run", "dev", "--", "--host"]
+CMD ["pnpm", "run", "dev", "--", "--host"]
 
 # Stage 3: Build
 FROM base AS build
 COPY . .
+RUN pnpm run build
 RUN pnpm run build
 
 # Stage 4: Production
