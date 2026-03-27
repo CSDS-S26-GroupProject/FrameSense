@@ -1,4 +1,4 @@
-import { Suspense, useRef, useMemo } from 'react'
+import { Suspense, useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -14,7 +14,15 @@ interface GlassesMeshProps {
 
 function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
   const { scene: originalScene } = useGLTF(modelPath)
-  const scene = useMemo(() => originalScene.clone(true), [originalScene])
+  const scene = useMemo(() => {
+    const clone = originalScene.clone(true)
+    const rotY = selectedFrame.modelRotationY ?? 0
+    if (rotY !== 0) {
+      clone.rotation.y = THREE.MathUtils.degToRad(rotY)
+      clone.updateMatrixWorld(true)
+    }
+    return clone
+  }, [originalScene, selectedFrame.modelRotationY])
   const meshRef = useRef<THREE.Group>(null)
   const { size } = useThree()
 
@@ -25,8 +33,17 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
 
   const modelWidth = useMemo(() => {
     const box = new THREE.Box3().setFromObject(scene)
-    return box.getSize(new THREE.Vector3()).x
+    const dims = box.getSize(new THREE.Vector3())
+    return Math.max(dims.x, dims.y, dims.z)
   }, [scene])
+
+  useEffect(() => {
+    const box = new THREE.Box3().setFromObject(scene)
+    const dims = box.getSize(new THREE.Vector3())
+    console.log(
+      `[GlassesCanvas] ${modelPath} bbox: x=${dims.x.toFixed(4)} y=${dims.y.toFixed(4)} z=${dims.z.toFixed(4)} → modelWidth=${modelWidth.toFixed(4)}`
+    )
+  }, [scene, modelPath, modelWidth])
 
   const CAM_FOV_DEG = 60
   const CAM_Z = 1
@@ -63,12 +80,7 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
       meshRef.current.scale.setScalar(targetWidth / modelWidth)
     }
 
-    const NOSE_BRIDGE_OFFSET_FRACTION = 0.25
-    const box = new THREE.Box3().setFromObject(meshRef.current)
-    const modelHeight = box.max.y - box.min.y
-    const offsetY = modelHeight * NOSE_BRIDGE_OFFSET_FRACTION
-
-    meshRef.current.position.set(x, y + offsetY, Z_PLANE)
+    meshRef.current.position.set(x, y, Z_PLANE)
   })
 
   return <primitive ref={meshRef} object={scene} scale={1} />

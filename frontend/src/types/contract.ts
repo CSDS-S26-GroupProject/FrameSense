@@ -29,6 +29,7 @@ export interface GlassesFrame {
     recommendedShapes: FaceShape[];
     modelPath: string;       // path to .glb file
     thumbnailPath: string;   // path to preview image
+    modelRotationY?: number; // degrees to rotate the GLB around Y so it faces -Z
 }
 
 // ----- The Core Data Contract -----
@@ -36,11 +37,13 @@ export interface GlassesFrame {
 export interface FrameSenseState {
     // Team 1 writes these
     rawLandmarks: Point3D[] | null;       // all 468 MediaPipe landmarks
+    rawTransformMatrix: Float32Array | null; // raw 4x4 from MediaPipe
     headPose: HeadPose | null;
     noseBridge: Point3D | null;           // landmark #6
+    noseBridgeBottom: Point3D | null;     // midpoint of landmarks #195 & #197
     leftPupil: Point3D | null;            // landmark #468
     rightPupil: Point3D | null;           // landmark #473
-    leftEarTop: Point3D | null;            // landmark #468
+    leftEarTop: Point3D | null;            // landmark #356
     rightEarTop: Point3D | null;
     faceShape: FaceShape | null;          // Phase 2
 
@@ -53,6 +56,7 @@ export interface FrameSenseState {
     // Team 1 actions
     setLandmarks: (landmarks: Point3D[]) => void;
     setHeadPose: (pose: HeadPose) => void;
+    setRawTransformMatrix: (m: Float32Array) => void;
 
     // Team 3 actions
     selectGlasses: (id: string) => void;
