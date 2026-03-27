@@ -46,6 +46,8 @@ export interface FrameSenseState {
     leftEarTop: Point3D | null;            // landmark #356
     rightEarTop: Point3D | null;
     faceShape: FaceShape | null;          // Phase 2
+    
+
 
     // Team 3 writes these
     selectedGlassesId: string | null;
