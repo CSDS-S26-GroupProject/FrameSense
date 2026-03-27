@@ -21,6 +21,9 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
   const headPose = useFSStore((s) => s.headPose)
   const leftPupil = useFSStore((s) => s.leftPupil)
   const rightPupil = useFSStore((s) => s.rightPupil)
+  const leftEarTop  = useFSStore((s) => s.leftEarTop)
+  const rightEarTop = useFSStore((s) => s.rightEarTop)
+
 
   // log bounding box once so Team 3 can read real model dimensions
   const scale = useMemo(() => {
@@ -104,6 +107,7 @@ meshRef.current.scale.setScalar(scale * (ipd / BASE_IPD))
 return <primitive ref={meshRef} object={scene} scale={scale} />
 //return <primitive ref={meshRef} object={scene} scale={1.0} /> //was 1.0
 }
+
 
 // ── Fallback shown while GLB is loading ────────────────────────────────────
 

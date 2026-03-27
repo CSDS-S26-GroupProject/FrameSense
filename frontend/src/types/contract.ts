@@ -40,6 +40,8 @@ export interface FrameSenseState {
     noseBridge: Point3D | null;           // landmark #6
     leftPupil: Point3D | null;            // landmark #468
     rightPupil: Point3D | null;           // landmark #473
+    leftEarTop: Point3D | null;            // landmark #468
+    rightEarTop: Point3D | null;
     faceShape: FaceShape | null;          // Phase 2
 
     // Team 3 writes these

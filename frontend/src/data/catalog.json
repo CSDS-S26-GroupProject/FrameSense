@@ -34,5 +34,30 @@
         "recommendedShapes": ["round", "square", "heart"],
         "modelPath": "/models/cat_eye.glb",
         "thumbnailPath": "/thumbnails/cat_eye.png"
+    },
+    {
+        "id": "round-gold-001",
+        "name": "Round Gold",
+        "style": "Round, Wired",
+        "frameWidthMm": 128,
+        "bridgeWidthMm": 21,
+        "templeLengthMm": 145,
+        "colors": ["gold"],
+        "recommendedShapes": ["round", "square", "heart"],
+        "modelPath": "/models/julian_glasses.glb",
+        "thumbnailPath": "/thumbnails/cat_eye.png"
+    },
+        {
+        "id": "frameless-001",
+        "name": "Frameless",
+        "style": "frameless",
+        "frameWidthMm": 135,
+        "bridgeWidthMm": 17,
+        "templeLengthMm": 141,
+        "colors": ["grey"],
+        "recommendedShapes": ["oval", "diamond", "square"],
+        "modelPath": "/models/frameless.glb",
+        "thumbnailPath": "/thumbnails/frameless.png"
     }
+
 ]
