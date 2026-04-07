@@ -7,6 +7,7 @@ import type { Point3D, HeadPose } from '../types/contract'
 export function useMediaPipe(videoRef: React.RefObject<HTMLVideoElement | null>) {
     const setLandmarks = useFSStore((state) => state.setLandmarks)
     const setHeadPose = useFSStore((state) => state.setHeadPose)
+    const setRawTransformMatrix = useFSStore((state) => state.setRawTransformMatrix)
     const landmarkerRef = useRef<FaceLandmarker | null>(null)
     const animFrameRef = useRef<number>(0)
 
@@ -56,6 +57,7 @@ export function useMediaPipe(videoRef: React.RefObject<HTMLVideoElement | null>)
                 // extract head pose from the transformation matrix
                 if (results.facialTransformationMatrixes?.[0]) {
                     const matrix = new Float32Array(results.facialTransformationMatrixes[0].data)
+                    setRawTransformMatrix(matrix)
                     const pose = extractHeadPose(matrix)
                     setHeadPose(pose)
                 }
@@ -71,7 +73,7 @@ export function useMediaPipe(videoRef: React.RefObject<HTMLVideoElement | null>)
             cancelAnimationFrame(animFrameRef.current)
             landmarkerRef.current?.close()
         }
-    }, [setLandmarks, setHeadPose, videoRef])
+    }, [setLandmarks, setHeadPose, setRawTransformMatrix, videoRef])
 }
 
 function extractHeadPose(matrix: Float32Array): HeadPose {

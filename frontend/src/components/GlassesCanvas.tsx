@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useMemo } from 'react'
+import { Suspense, useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -13,7 +13,16 @@ interface GlassesMeshProps {
 }
 
 function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
-  const { scene } = useGLTF(modelPath)
+  const { scene: originalScene } = useGLTF(modelPath)
+  const scene = useMemo(() => {
+    const clone = originalScene.clone(true)
+    const rotY = selectedFrame.modelRotationY ?? 0
+    if (rotY !== 0) {
+      clone.rotation.y = THREE.MathUtils.degToRad(rotY)
+      clone.updateMatrixWorld(true)
+    }
+    return clone
+  }, [originalScene, selectedFrame.modelRotationY])
   const meshRef = useRef<THREE.Group>(null)
   const { size } = useThree()
 
@@ -21,93 +30,61 @@ function GlassesMesh({ modelPath, selectedFrame }: GlassesMeshProps) {
   const headPose = useFSStore((s) => s.headPose)
   const leftPupil = useFSStore((s) => s.leftPupil)
   const rightPupil = useFSStore((s) => s.rightPupil)
-  const leftEarTop  = useFSStore((s) => s.leftEarTop)
-  const rightEarTop = useFSStore((s) => s.rightEarTop)
 
+  const modelWidth = useMemo(() => {
+    const box = new THREE.Box3().setFromObject(scene)
+    const dims = box.getSize(new THREE.Vector3())
+    return Math.max(dims.x, dims.y, dims.z)
+  }, [scene])
 
-  // log bounding box once so Team 3 can read real model dimensions
-  const scale = useMemo(() => {
+  useEffect(() => {
     const box = new THREE.Box3().setFromObject(scene)
-    const dimensions = new THREE.Vector3()
-    box.getSize(dimensions)
-    const modelWidthUnits = dimensions.x          // bounding box width
-    const targetWidthM = selectedFrame.frameWidthMm / 1000  // mm → meters
-    return targetWidthM / modelWidthUnits
-  }, [scene, selectedFrame.frameWidthMm])
-  
-  /*useEffect(() => {
-    const box = new THREE.Box3().setFromObject(scene)
-    const dimensions = new THREE.Vector3()
-    box.getSize(dimensions)
-    console.log(`[GlassesCanvas] ${modelPath} bounding box (units):`, dimensions)
-    console.log(`[GlassesCanvas] Assuming 1 unit = 1m → width: ${(dimensions.x * 1000).toFixed(1)}mm`)
-  }, [scene, modelPath])*/
-  
+    const dims = box.getSize(new THREE.Vector3())
+    console.log(
+      `[GlassesCanvas] ${modelPath} bbox: x=${dims.x.toFixed(4)} y=${dims.y.toFixed(4)} z=${dims.z.toFixed(4)} → modelWidth=${modelWidth.toFixed(4)}`
+    )
+  }, [scene, modelPath, modelWidth])
+
+  const CAM_FOV_DEG = 60
+  const CAM_Z = 1
+  const Z_PLANE = 0
+  const AVG_IPD_MM = 63
 
   useFrame(() => {
     if (!meshRef.current || !noseBridge || !headPose) return
 
-    // MediaPipe gives normalized [0,1] coords with origin top-left.
-    // Three.js canvas has origin center, y-axis up.
-    // Map: x: [0,1] → [-aspect/2, aspect/2], y: [0,1] → [0.5, -0.5]
     const aspect = size.width / size.height
-    const x = (noseBridge.x - 0.5) * aspect
-    const y = -(noseBridge.y -.5)//* aspect -.1//-(noseBridge.y - 0.5) - 0.03
-    // z depth: bring glasses slightly in front of the "face plane"
-    const z = noseBridge.z -1 //0.3 + noseBridge.z * -1.5
+    const fovRad = THREE.MathUtils.degToRad(CAM_FOV_DEG)
+    const dist = CAM_Z - Z_PLANE
+    const visH = 2 * Math.tan(fovRad / 2) * dist
+    const visW = visH * aspect
 
-    // apply head rotation from MediaPipe transformation matrix
+    const x = (noseBridge.x - 0.5) * visW
+    const y = -(noseBridge.y - 0.5) * visH
+
     meshRef.current.rotation.set(
       THREE.MathUtils.degToRad(headPose.pitch),
       THREE.MathUtils.degToRad(headPose.yaw),
       THREE.MathUtils.degToRad(-headPose.roll)
     )
 
-    //Scaling the width of the glasses based on the ears
-if (leftEarTop && rightEarTop) {
-  // Calculate ear distance in normalized space
-  const earDistNormalized = Math.sqrt(
-    Math.pow(rightEarTop.x - leftEarTop.x, 2) +
-    Math.pow(rightEarTop.y - leftEarTop.y, 2)
-  )
-  
-  // Convert to Three.js units
-  const earDistThree = earDistNormalized * aspect
-  
-  // Your glasses model's actual ear-to-ear span (measure from bounding box)
-  const modelEarSpan = 0.08 // Adjust this based on your actual model
-  
-  const scale = earDistThree / modelEarSpan
-  meshRef.current.scale.setScalar(scale)
-}
+    // IPD-based scaling: measure pupil distance in world units,
+    // compare to average human IPD (63mm) to get a mm→world ratio,
+    // then scale the model so its width matches the catalog frameWidthMm.
+    if (leftPupil && rightPupil) {
+      const ipdWorld = Math.hypot(
+        (rightPupil.x - leftPupil.x) * visW,
+        (rightPupil.y - leftPupil.y) * visH
+      )
+      const targetWidth = (selectedFrame.frameWidthMm / AVG_IPD_MM) * ipdWorld
+      meshRef.current.scale.setScalar(targetWidth / modelWidth)
+    }
 
-    // ── Vertical offset: nudge glasses DOWN so nose pad sits on bridge ──
-    // NOSE_BRIDGE_OFFSET_FRACTION: how far the nose bridge is from the
-    // model's center, as a fraction of model height. Tune this (0.1–0.4).
-    const NOSE_BRIDGE_OFFSET_FRACTION = 0.25
-    const box = new THREE.Box3().setFromObject(meshRef.current)
-    const modelHeight = (box.max.y - box.min.y)
-
-    // Shift position so nose pad aligns with landmark instead of model center
-    const offsetY = modelHeight * NOSE_BRIDGE_OFFSET_FRACTION
-    meshRef.current.position.set(x, y + offsetY, z)
+    meshRef.current.position.set(x, y, Z_PLANE)
   })
 
-
-    /*//Scale in the z direction
-    if (leftPupil && rightPupil) {
-    const dist_away = Math.sqrt(
-        Math.pow(rightPupil.x - leftPupil.x, 2) +
-        Math.pow(rightPupil.y - leftPupil.y, 2)
-    )
-    const suggested_dist_away = 0.05
-    meshRef.current.scale.setScalar(1.0 * (dist_away/ suggested_dist_away)) //change 1.0 to scale IF useMemo is uncommented. If useEffect is uncommented, use 1.0
-    }
-  })*/
-  return <primitive ref={meshRef} object={scene} scale={scale} />
-  //return <primitive ref={meshRef} object={scene} scale={1.0} /> //was 1.0
+  return <primitive ref={meshRef} object={scene} scale={1} />
 }
-
 
 // ── Fallback shown while GLB is loading ────────────────────────────────────
 
@@ -129,7 +106,6 @@ export default function GlassesCanvas() {
 
   const selectedFrame = catalog.find((f) => f.id === selectedId)
 
-  // don't render canvas at all if no glasses selected or no face detected
   if (!selectedFrame || !noseBridge) return null
 
   return (
