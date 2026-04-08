@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.assets import router as assets_router
+from app.api.availability import router as availability_router
 from app.api.catalog import router as catalog_router
 
 
@@ -11,6 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(catalog_router)
+app.include_router(availability_router)
 app.include_router(assets_router)
 
 

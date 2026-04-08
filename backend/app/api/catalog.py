@@ -6,7 +6,10 @@ from app.services.catalog_sync import (
     list_supported_vendors,
     sync_vendor_catalog,
 )
-from app.services.firestore_admin import sync_catalog_products_to_firestore
+from app.services.firestore_admin import (
+    sync_catalog_products_to_firestore,
+    sync_frame_style_mappings_to_firestore,
+)
 
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
@@ -15,6 +18,16 @@ router = APIRouter(prefix="/catalog", tags=["catalog"])
 @router.get("/vendors", response_model=list[str])
 def get_supported_vendors() -> list[str]:
     return list_supported_vendors()
+
+
+@router.post("/sync/frame-style-mappings", response_model=dict)
+def sync_frame_style_mappings() -> dict:
+    """Sync frame_style_mappings.json to Firestore.
+
+    Reads the JSON file from backend/data/ and writes each frame style
+    as a document in the frameStyleMappings collection.
+    """
+    return sync_frame_style_mappings_to_firestore()
 
 
 @router.post("/sync/{vendor}", response_model=SyncResponse)

@@ -3,11 +3,12 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from functools import lru_cache
+from pathlib import Path
 
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-from app.config import get_settings
+from app.config import BACKEND_DIR, get_settings
 from app.models.catalog import FirestoreSyncSummary, NormalizedCatalogProduct
 
 
@@ -109,3 +110,39 @@ def sync_catalog_products_to_firestore(
         document_ids=document_ids,
         snapshot_path=snapshot_path,
     )
+
+
+def sync_frame_style_mappings_to_firestore() -> dict:
+    """Read frame_style_mappings.json and write each style as a document
+    in the frameStyleMappings Firestore collection.
+
+    Returns a summary dict with the collection name and styles synced.
+    """
+    settings = get_settings()
+    db = get_firestore_client()
+
+    mappings_path = BACKEND_DIR / "data" / "frame_style_mappings.json"
+    with open(mappings_path) as f:
+        mappings = json.load(f)
+
+    batch = db.batch()
+    synced_at = datetime.now(timezone.utc).isoformat()
+    styles_synced: list[str] = []
+
+    for style, data in mappings.items():
+        doc_ref = db.collection(settings.firestore_mappings_collection).document(style)
+        batch.set(doc_ref, {
+            "compatibleFaceShapes": data["compatibleFaceShapes"],
+            "description": data["description"],
+            "syncedAt": synced_at,
+        })
+        styles_synced.append(style)
+
+    batch.commit()
+
+    return {
+        "collection": settings.firestore_mappings_collection,
+        "stylesCount": len(styles_synced),
+        "styles": styles_synced,
+        "syncedAt": synced_at,
+    }

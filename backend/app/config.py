@@ -12,6 +12,7 @@ BACKEND_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = BACKEND_DIR.parent
 
 # Load backend-local env first, then allow the repo root env to supplement it.
+load_dotenv(BACKEND_DIR / ".env.local")
 load_dotenv(BACKEND_DIR / ".env")
 load_dotenv(REPO_ROOT / ".env")
 
@@ -36,6 +37,11 @@ class Settings(BaseModel):
     r2_bucket_name: str | None = os.getenv("R2_BUCKET_NAME")
     r2_public_base_url: str | None = os.getenv("R2_PUBLIC_BASE_URL")
     r2_signed_url_ttl_seconds: int = int(os.getenv("R2_SIGNED_URL_TTL_SECONDS", "900"))
+
+    serpapi_api_key: str | None = os.getenv("SERPAPI_API_KEY")
+    firestore_mappings_collection: str = os.getenv(
+        "FIRESTORE_MAPPINGS_COLLECTION", "frameStyleMappings"
+    )
 
 
 @lru_cache
