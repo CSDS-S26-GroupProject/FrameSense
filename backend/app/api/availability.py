@@ -6,6 +6,7 @@ from app.services.serpapi_search import (
     search_brand_catalog,
 )
 from app.services.firestore_admin import sync_catalog_products_to_firestore
+from app.services.warby_scraper import scrape_warby_parker
 
 router = APIRouter(prefix="/availability", tags=["availability"])
 
@@ -74,3 +75,34 @@ def search_all(
             summaries[brand] = {"productsFound": 0, "firestore": None}
 
     return summaries
+
+
+@router.post("/scrape/warby-parker")
+def scrape_warby(max_products: int | None = None, write_to_firestore: bool = True) -> dict:
+    """Scrape Warby Parker's eyeglasses page using Playwright + BeautifulSoup.
+
+    Args:
+        max_products: Optional cap on products to scrape (default: all).
+        write_to_firestore: Whether to sync results to Firestore (default: True).
+    """
+    products = scrape_warby_parker(max_products=max_products)
+
+    if not products:
+        return {"brand": "Warby Parker", "productsFound": 0, "firestore": None}
+
+    result = {
+        "brand": "Warby Parker",
+        "productsFound": len(products),
+    }
+
+    if write_to_firestore:
+        sync_summary = sync_catalog_products_to_firestore(
+            vendor="warby_parker",
+            products=products,
+        )
+        result["firestore"] = sync_summary.model_dump()
+    else:
+        result["firestore"] = None
+        result["products"] = [p.model_dump(mode="json") for p in products]
+
+    return result
