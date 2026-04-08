@@ -1,6 +1,5 @@
 import { useFSStore } from '../store/useFSStore'
 import GlassesCanvas from './GlassesCanvas'
-import LandmarkMesh from './LandmarkMesh'
 
 
 interface CameraFeedProps {

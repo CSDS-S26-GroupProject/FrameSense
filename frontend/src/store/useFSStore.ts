@@ -37,4 +37,5 @@ export const useFSStore = create<FrameSenseState>((set) => ({
     setRawTransformMatrix: (m) => set({ rawTransformMatrix: m }),
     selectGlasses: (id) => set({ selectedGlassesId: id }),
     setFitScore: (score, notes) => set({ fitScore: score, fitNotes: notes }),
+    setFaceShape: (shape) => set({ faceShape: shape }),
 }))

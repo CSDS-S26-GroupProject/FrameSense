@@ -14,7 +14,7 @@ export interface HeadPose {
     roll: number;  // head tilt (ear to shoulder) in degrees
 }
 
-export type FaceShape = 'oval' | 'round' | 'square' | 'heart' | 'diamond';
+export type FaceShape = 'oval' | 'round' | 'square' | 'heart';
 
 // ----- Glasses Catalog -----
 
@@ -57,6 +57,7 @@ export interface FrameSenseState {
     setLandmarks: (landmarks: Point3D[]) => void;
     setHeadPose: (pose: HeadPose) => void;
     setRawTransformMatrix: (m: Float32Array) => void;
+    setFaceShape: (shape: FaceShape) => void;
 
     // Team 3 actions
     selectGlasses: (id: string) => void;

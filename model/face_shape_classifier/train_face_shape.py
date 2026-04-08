@@ -16,6 +16,7 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import accuracy_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
+import joblib
 
 print("Script started")
 
@@ -23,6 +24,8 @@ print("Script started")
 # INITIAL SETUP
 # =========================
 
+#this is for julian's laptop bc it wasn't working properly
+MODEL_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
 MODEL_PATH = "face_landmarker.task"
 
 base_options = python.BaseOptions(
@@ -220,3 +223,72 @@ plt.xlabel("Predicted")
 plt.ylabel("True")
 plt.tight_layout()
 plt.show()
+
+# =========================
+# FINAL PREDICTION FUNCTION
+# =========================
+
+def predict_face_shape(image_path, model, confidence_threshold=0.4):
+    """
+    Predict face shape from an image.
+    Always returns a label.
+    """
+
+    print("\n--- Prediction Debug ---")
+    print("Image path:", image_path)
+    print("File exists:", os.path.exists(image_path))
+
+    landmarks = extract_landmarks(image_path)
+
+    # Case 1: No face detected
+    if landmarks is None:
+        print("No face detected -> returning fallback")
+        return "unknown"
+
+    features = compute_full_features(landmarks)
+    features = features.reshape(1, -1)
+
+    try:
+        prediction = model.predict(features)[0]
+
+        # If model supports probability
+        if hasattr(model, "predict_proba"):
+            probs = model.predict_proba(features)[0]
+            confidence = np.max(probs)
+
+            print(f"Prediction: {prediction} (confidence={confidence:.2f})")
+
+            # Optional confidence filter
+            if confidence < confidence_threshold:
+                print("Low confidence -> returning 'uncertain'")
+                return "uncertain"
+
+        else:
+            print(f"Prediction: {prediction}")
+
+        return prediction
+
+    except Exception as e:
+        print("Prediction error:", e)
+        return "unknown"
+
+
+# =========================
+# TEST IMAGE (YOUR SETUP)
+# =========================
+
+def run_face_shape_pipeline(uploaded_image_path):
+    print("\nUser uploaded:", uploaded_image_path)
+
+    result = predict_face_shape(uploaded_image_path, best_svm)
+
+    print("Predicted Face Shape:", result)
+
+    return result
+
+
+# simulate upload
+run_face_shape_pipeline("test_images/myface.jpg")
+
+joblib.dump(best_svm, 'face_shape_model.pkl')
+print("Model saved to face_shape_model.pkl")
