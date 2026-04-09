@@ -26,7 +26,7 @@ print("Script started")
 
 #this is for julian's laptop bc it wasn't working properly
 MODEL_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
-MODEL_PATH = "face_landmarker.task"
+#MODEL_PATH = "face_landmarker.task"
 
 base_options = python.BaseOptions(
     model_asset_path=MODEL_PATH
@@ -97,10 +97,10 @@ def compute_full_features(landmarks):
 # DATASET BUILDING
 # =========================
 
+#dataset_path = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\dataset"
 dataset_path = "dataset"
 data = []
 labels = []
-
 print("Scanning dataset directory...")
 
 for label in sorted(os.listdir(dataset_path)):
@@ -139,22 +139,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 print("Train shape:", X_train.shape)
 print("Test shape:", X_test.shape)
-
-# =========================
-# RANDOM FOREST (baseline)
-# =========================
-
-rf_model = RandomForestClassifier(
-    n_estimators=300,
-    random_state=42
-)
-
-rf_model.fit(X_train, y_train)
-
-rf_pred = rf_model.predict(X_test)
-rf_acc = accuracy_score(y_test, rf_pred)
-
-print("\nRandom Forest Accuracy:", round(rf_acc, 3))
 
 # =========================
 # SVM WITH PCA (100 components)
@@ -288,7 +272,7 @@ def run_face_shape_pipeline(uploaded_image_path):
 
 
 # simulate upload
-run_face_shape_pipeline("test_images/myface.jpg")
+#run_face_shape_pipeline("test_images/myface.jpg")
 
 joblib.dump(best_svm, 'face_shape_model.pkl')
 print("Model saved to face_shape_model.pkl")

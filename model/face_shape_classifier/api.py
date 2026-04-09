@@ -131,7 +131,7 @@ import tempfile
 _landmarker = None
 
 LANDMARKER_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
-
+LANDMARKER_PATH = "face_landmarker.task"
 def get_landmarker():
     """Lazy-load the MediaPipe landmarker (only once)."""
     global _landmarker
