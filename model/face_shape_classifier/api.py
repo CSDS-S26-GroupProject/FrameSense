@@ -12,7 +12,6 @@ import cv2
 
 app = Flask(__name__)
 CORS(app)  # allows the React frontend (localhost:5173) to call this API
-
 #Loading the model
 MODEL_FILE = "face_shape_model.pkl"
 MODEL_FILE = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_shape_model.pkl"
@@ -89,35 +88,38 @@ def predict():
 
         landmarks_raw = body['landmarks']
 
-        # validate shape
-        landmarks = np.array(landmarks_raw, dtype=np.float32)
+        # handle both [{x,y,z}, ...] and [[x,y,z], ...] formats
+        if isinstance(landmarks_raw[0], dict):
+            # frontend sends {x, y, z} objects
+            landmarks = np.array(
+                [[lm['x'], lm['y'], lm['z']] for lm in landmarks_raw],
+                dtype=np.float32
+            )
+        else:
+            # already an array format
+            landmarks = np.array(landmarks_raw, dtype=np.float32)
+
         if landmarks.shape[0] < 468:
             return jsonify({
                 'error': f'Expected 468 landmarks, got {landmarks.shape[0]}'
             }), 400
 
-        # extract features — same pipeline as training
         features = compute_full_features(landmarks)
-
-        # predict
         shape = model.predict([features])[0]
-
-        # probabilities (requires probability=True on the SVM, which it has)
         probs = model.predict_proba([features])[0]
         prob_dict = {
             cls: round(float(p), 4)
             for cls, p in zip(model.classes_, probs)
         }
 
-        confidence = round(float(max(probs)), 4)
-
         return jsonify({
             'faceShape':     shape,
-            'confidence':    confidence,
+            'confidence':    round(float(max(probs)), 4),
             'probabilities': prob_dict
         })
 
     except Exception as e:
+        print(f"[/predict error]: {e}")  # prints full error to Python terminal
         return jsonify({ 'error': str(e) }), 500
 
 

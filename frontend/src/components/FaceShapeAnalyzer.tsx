@@ -3,6 +3,7 @@
 // Place in App.tsx and toggle with a boolean state
 
 import { useState, useRef, useCallback } from 'react'
+import { useFSStore } from '../store/useFSStore'
 
 interface FaceShapeAnalyzerProps {
     onBack: () => void
@@ -29,7 +30,8 @@ export default function FaceShapeAnalyzer({ onBack }: FaceShapeAnalyzerProps) {
     const [result, setResult] = useState<PredictionResult | null>(null)
     const [error, setError] = useState<string | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
-
+    const setFaceShape = useFSStore((s) => s.setFaceShape)
+    
     const handleFile = useCallback(async (file: File) => {
         if (!file.type.startsWith('image/')) {
             setError('Please upload an image file.')
@@ -68,6 +70,7 @@ export default function FaceShapeAnalyzer({ onBack }: FaceShapeAnalyzerProps) {
                 throw new Error(data.error || 'Prediction failed')
             }
             setResult(data as PredictionResult)
+            setFaceShape(data.faceShape)
         } catch (e: unknown) {
             if (e instanceof Error) {
                 setError(e.message.includes('fetch') 

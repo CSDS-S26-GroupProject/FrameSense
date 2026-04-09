@@ -11,8 +11,6 @@ export function useMediaPipe(videoRef: React.RefObject<HTMLVideoElement | null>)
     const landmarkerRef = useRef<FaceLandmarker | null>(null)
     const animFrameRef = useRef<number>(0)
 
-    let frameCount = 0
-
     useEffect(() => {
         let active = true
 
@@ -63,19 +61,6 @@ export function useMediaPipe(videoRef: React.RefObject<HTMLVideoElement | null>)
                     const pose = extractHeadPose(matrix)
                     setHeadPose(pose)
                 }
-
-                if (frameCount % 30 === 0) {
-                    fetch('http://localhost:5000/predict', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ landmarks: landmarks })
-                    })
-                    .then(r => r.json())
-                    .then(data => useFSStore.getState().setFaceShape(data.faceShape))
-                    .catch(err => console.warn('[FaceShape] API unavailable:', err))
-                }
-
-                frameCount++
             }
 
             animFrameRef.current = requestAnimationFrame(detect)

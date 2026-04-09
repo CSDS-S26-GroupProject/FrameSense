@@ -28,7 +28,7 @@
     {
         "id": "cat-eye-001",
         "name": "Cat Eye",
-        "style": "cat-eye",
+        "style": "cat_eye",
         "frameWidthMm": 135,
         "bridgeWidthMm": 16,
         "templeLengthMm": 138,
@@ -41,7 +41,7 @@
     {
         "id": "round-gold-001",
         "name": "Round Gold",
-        "style": "Round, Wired",
+        "style": "round",
         "frameWidthMm": 128,
         "bridgeWidthMm": 21,
         "templeLengthMm": 145,
