@@ -1,8 +1,6 @@
-import os
-from pathlib import Path
-
 import cv2
 import numpy as np
+import os
 
 import mediapipe as mp
 from mediapipe.tasks import python
@@ -19,6 +17,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 import joblib
+from xgboost import XGBClassifier
 
 print("Script started")
 
@@ -26,9 +25,9 @@ print("Script started")
 # INITIAL SETUP
 # =========================
 
-_SCRIPT_DIR = Path(__file__).resolve().parent
-_REPO_ROOT = _SCRIPT_DIR.parent.parent
-MODEL_PATH = str(_SCRIPT_DIR / "face_landmarker.task")
+#this is for julian's laptop bc it wasn't working properly
+#MODEL_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
+MODEL_PATH = "face_landmarker.task"
 
 base_options = python.BaseOptions(
     model_asset_path=MODEL_PATH
@@ -99,7 +98,8 @@ def compute_full_features(landmarks):
 # DATASET BUILDING
 # =========================
 
-dataset_path = str(_REPO_ROOT / "dataset")
+#dataset_path = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\dataset"
+dataset_path = "dataset"
 data = []
 labels = []
 print("Scanning dataset directory...")
@@ -210,6 +210,36 @@ plt.tight_layout()
 plt.show()
 
 # =========================
+# XGBOOST
+# =========================
+
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+y_train_enc = le.fit_transform(y_train)
+y_test_enc = le.transform(y_test)
+
+xgb_pipeline = Pipeline([
+    ("scaler", StandardScaler()),
+    ("pca", PCA(n_components=100)),
+    ("xgb", XGBClassifier(
+        n_estimators=200,
+        max_depth=6,
+        learning_rate=0.1,
+        use_label_encoder=False,
+        eval_metric="mlogloss",
+        random_state=42
+    ))
+])
+
+print("\nTraining XGBoost...")
+xgb_pipeline.fit(X_train, y_train_enc)
+
+y_pred_xgb = xgb_pipeline.predict(X_test)
+xgb_acc = accuracy_score(y_test_enc, y_pred_xgb)
+print("XGBoost Test Accuracy:", round(xgb_acc, 3))
+
+# =========================
 # FINAL PREDICTION FUNCTION
 # =========================
 
@@ -277,3 +307,10 @@ def run_face_shape_pipeline(uploaded_image_path):
 
 joblib.dump(best_svm, 'face_shape_model.pkl')
 print("Model saved to face_shape_model.pkl")
+
+if xgb_acc > svm_acc:
+    joblib.dump((xgb_pipeline, le), 'face_shape_model_xgb.pkl')git switch -c local origin/
+    print("XGBoost model saved (better accuracy)")
+else:
+    joblib.dump(best_svm, 'face_shape_model.pkl')
+    print("SVM model saved (better accuracy)")git
