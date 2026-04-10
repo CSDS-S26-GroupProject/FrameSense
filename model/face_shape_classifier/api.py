@@ -1,20 +1,24 @@
+import os
+import tempfile
+from pathlib import Path
+
+import cv2
+import joblib
 import mediapipe as mp
+import numpy as np
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision as mp_vision
 from werkzeug.utils import secure_filename
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import joblib
-import numpy as np
-import os
-import cv2
 
+# Resolve next to this file so Mac / Windows / Linux all work (no hardcoded drives).
+_MODEL_DIR = Path(__file__).resolve().parent
+MODEL_FILE = str(_MODEL_DIR / "face_shape_model.pkl")
+LANDMARKER_PATH = str(_MODEL_DIR / "face_landmarker.task")
 
 app = Flask(__name__)
 CORS(app)  # allows the React frontend (localhost:5173) to call this API
-#Loading the model
-MODEL_FILE = "face_shape_model.pkl"
-MODEL_FILE = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_shape_model.pkl"
 
 if not os.path.exists(MODEL_FILE):
     raise FileNotFoundError(
@@ -123,17 +127,9 @@ def predict():
         return jsonify({ 'error': str(e) }), 500
 
 
-import cv2
-import mediapipe as mp
-from mediapipe.tasks import python as mp_python
-from mediapipe.tasks.python import vision as mp_vision
-from werkzeug.utils import secure_filename
-import tempfile
-
 _landmarker = None
 
-LANDMARKER_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
-LANDMARKER_PATH = "face_landmarker.task"
+
 def get_landmarker():
     """Lazy-load the MediaPipe landmarker (only once)."""
     global _landmarker

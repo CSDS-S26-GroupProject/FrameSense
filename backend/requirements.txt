@@ -1,10 +1,24 @@
+# FrameSense backend — install: pip install -r requirements.txt
+# Docker: see backend/Dockerfile
+
+# API
 fastapi>=0.115,<1.0
 uvicorn[standard]>=0.32,<1.0
 pydantic>=2.10,<3.0
-boto3>=1.35,<2.0
-firebase-admin>=6.6,<7.0
+
+# Config
 python-dotenv>=1.0,<2.0
+
+# Firestore / Firebase Admin
+firebase-admin>=6.6,<7.0
+
+# Cloudflare R2 (S3-compatible)
+boto3>=1.35,<2.0
+
+# SerpAPI (Google Shopping, etc.)
 google-search-results>=2.4,<3.0
+
+# Warby / HTML tooling
 playwright>=1.40,<2.0
 beautifulsoup4>=4.12,<5.0
 lxml>=5.0,<6.0

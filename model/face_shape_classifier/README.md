@@ -131,6 +131,8 @@ dataset/
 
 Each folder name represents the **label used for classification**.
 
+**Repository note:** `dataset/` (repo root) and `FaceShape Dataset/` (this folder) are **gitignored** and not tracked. Keep copies locally or sync from object storage (e.g. Cloudflare R2) using the same directory layout so training scripts keep working.
+
 The script then automatically performs a **training/testing split during execution**, typically using an **80/20 split**.
 
 ### Face Shape Classes
@@ -141,6 +143,56 @@ The dataset contains four classes:
 - Square  
 - Oval  
 - Round
+
+---
+
+## macOS, Windows, and Linux
+
+Paths are **not** hardcoded to a single machine (no `D:\...` or other drive letters).
+
+- **`api.py`** loads `face_shape_model.pkl` and `face_landmarker.task` from **this directory** using `Path(__file__).resolve().parent`, so the Flask API behaves the same on Mac, Windows, and Linux as long as those files sit next to `api.py`.
+- **`train_face_shape.py`** points the MediaPipe model at the same folder, and resolves the training images under **`dataset/` at the repo root** (`FrameSense/dataset/`), so your current shell directory matters less than before.
+
+**Git / editor hygiene**
+
+- The repo has a root **`.gitattributes`** so common text files (`.py`, `.ts`, etc.) stay **LF** in Git; that reduces noisy “whole file changed” diffs when Windows and Mac editors disagree on line endings.
+- **`.DS_Store`** (macOS), **`Thumbs.db`**, and **`Desktop.ini`** (Windows) are listed in **`.gitignore`** — do not commit them (they already caused merge pain in `.DS_Store`).
+
+Optional on Windows: `git config core.autocrlf true` so your working copy uses CRLF locally while the repo stays normalized.
+
+---
+
+## Run locally (dev)
+
+**Any OS — Flask dev server**
+
+```bash
+cd model/face_shape_classifier
+pip install -r requirements.txt
+python api.py
+```
+
+Or: `export FLASK_APP=api.py` (Unix) / `set FLASK_APP=api.py` (Windows), then `flask run --port 5000`.
+
+**Windows — production-like (optional)**
+
+Gunicorn does not run on Windows. Use **Waitress** instead:
+
+```bash
+waitress-serve --listen=127.0.0.1:5000 api:app
+```
+
+---
+
+## Deploy on Render (production)
+
+Render runs **Linux** only. **Keep Gunicorn** for the live service — do not change the start command to Waitress for Render.
+
+- Repo-root **`render.yaml`** defines a **Web Service** with `rootDir: model/face_shape_classifier`, `buildCommand: pip install -r requirements.txt`, and `gunicorn api:app --bind 0.0.0.0:$PORT --workers 1`.
+- **`runtime.txt`** pins Python for the build.
+- **`requirements.txt`** includes both **gunicorn** (Render) and **waitress** (optional local Windows testing).
+
+After deploy, point your frontend at `https://<your-service>.onrender.com` for `/health`, `/predict`, `/predict-image`.
 
 ---
 
@@ -159,7 +211,7 @@ pip install opencv-python numpy mediapipe scikit-learn seaborn matplotlib
 You must also download:
 
 * `face_landmarker.task` (MediaPipe model file)
-* Place it in the root directory of the project
+* Place it in **this folder** (`model/face_shape_classifier/`), next to `api.py` and `train_face_shape.py`
 
 ### Project Structure
 
