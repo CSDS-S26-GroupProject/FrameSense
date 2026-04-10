@@ -1,0 +1,14 @@
+__pycache__
+*.py[cod]
+*$py.class
+.Python
+.env
+.venv
+venv
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.git
+*.md
+warby_debug.html
+*.log

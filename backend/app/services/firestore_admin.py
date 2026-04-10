@@ -12,6 +12,13 @@ from app.config import BACKEND_DIR, get_settings
 from app.models.catalog import FirestoreSyncSummary, NormalizedCatalogProduct
 
 
+def _resolve_service_account_path(path_str: str) -> str:
+    path = Path(path_str)
+    if not path.is_absolute():
+        path = BACKEND_DIR / path
+    return str(path)
+
+
 def _build_credential():
     settings = get_settings()
 
@@ -19,7 +26,8 @@ def _build_credential():
         return credentials.Certificate(json.loads(settings.firebase_service_account_json))
 
     if settings.firebase_service_account_path:
-        return credentials.Certificate(settings.firebase_service_account_path)
+        resolved = _resolve_service_account_path(settings.firebase_service_account_path)
+        return credentials.Certificate(resolved)
 
     return None
 
