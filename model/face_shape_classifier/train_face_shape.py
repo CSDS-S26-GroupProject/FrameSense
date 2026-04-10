@@ -1,6 +1,8 @@
+import os
+from pathlib import Path
+
 import cv2
 import numpy as np
-import os
 
 import mediapipe as mp
 from mediapipe.tasks import python
@@ -24,9 +26,9 @@ print("Script started")
 # INITIAL SETUP
 # =========================
 
-#this is for julian's laptop bc it wasn't working properly
-MODEL_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
-#MODEL_PATH = "face_landmarker.task"
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parent.parent
+MODEL_PATH = str(_SCRIPT_DIR / "face_landmarker.task")
 
 base_options = python.BaseOptions(
     model_asset_path=MODEL_PATH
@@ -97,8 +99,7 @@ def compute_full_features(landmarks):
 # DATASET BUILDING
 # =========================
 
-#dataset_path = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\dataset"
-dataset_path = "dataset"
+dataset_path = str(_REPO_ROOT / "dataset")
 data = []
 labels = []
 print("Scanning dataset directory...")

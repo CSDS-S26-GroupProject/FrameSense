@@ -146,6 +146,22 @@ The dataset contains four classes:
 
 ---
 
+## macOS, Windows, and Linux
+
+Paths are **not** hardcoded to a single machine (no `D:\...` or other drive letters).
+
+- **`api.py`** loads `face_shape_model.pkl` and `face_landmarker.task` from **this directory** using `Path(__file__).resolve().parent`, so the Flask API behaves the same on Mac, Windows, and Linux as long as those files sit next to `api.py`.
+- **`train_face_shape.py`** points the MediaPipe model at the same folder, and resolves the training images under **`dataset/` at the repo root** (`FrameSense/dataset/`), so your current shell directory matters less than before.
+
+**Git / editor hygiene**
+
+- The repo has a root **`.gitattributes`** so common text files (`.py`, `.ts`, etc.) stay **LF** in Git; that reduces noisy “whole file changed” diffs when Windows and Mac editors disagree on line endings.
+- **`.DS_Store`** (macOS), **`Thumbs.db`**, and **`Desktop.ini`** (Windows) are listed in **`.gitignore`** — do not commit them (they already caused merge pain in `.DS_Store`).
+
+Optional on Windows: `git config core.autocrlf true` so your working copy uses CRLF locally while the repo stays normalized.
+
+---
+
 ## Installation
 
 ### Required Python Version
@@ -161,7 +177,7 @@ pip install opencv-python numpy mediapipe scikit-learn seaborn matplotlib
 You must also download:
 
 * `face_landmarker.task` (MediaPipe model file)
-* Place it in the root directory of the project
+* Place it in **this folder** (`model/face_shape_classifier/`), next to `api.py` and `train_face_shape.py`
 
 ### Project Structure
 
