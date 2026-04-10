@@ -131,6 +131,8 @@ dataset/
 
 Each folder name represents the **label used for classification**.
 
+**Repository note:** `dataset/` (repo root) and `FaceShape Dataset/` (this folder) are **gitignored** and not tracked. Keep copies locally or sync from object storage (e.g. Cloudflare R2) using the same directory layout so training scripts keep working.
+
 The script then automatically performs a **training/testing split during execution**, typically using an **80/20 split**.
 
 ### Face Shape Classes

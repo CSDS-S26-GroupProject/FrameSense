@@ -34,3 +34,15 @@ pnpm-lock.yaml
 *.njsproj
 *.sln
 *.sw?
+
+# Python virtualenvs
+.venv/
+venv/
+ENV/
+
+# Training / image datasets (host on R2 or similar; thousands of files slow git)
+dataset/
+model/face_shape_classifier/FaceShape Dataset/
+
+# Playwright debug HTML dumps
+warby_debug.html
