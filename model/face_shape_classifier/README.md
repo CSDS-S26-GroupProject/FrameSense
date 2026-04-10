@@ -162,6 +162,40 @@ Optional on Windows: `git config core.autocrlf true` so your working copy uses C
 
 ---
 
+## Run locally (dev)
+
+**Any OS — Flask dev server**
+
+```bash
+cd model/face_shape_classifier
+pip install -r requirements.txt
+python api.py
+```
+
+Or: `export FLASK_APP=api.py` (Unix) / `set FLASK_APP=api.py` (Windows), then `flask run --port 5000`.
+
+**Windows — production-like (optional)**
+
+Gunicorn does not run on Windows. Use **Waitress** instead:
+
+```bash
+waitress-serve --listen=127.0.0.1:5000 api:app
+```
+
+---
+
+## Deploy on Render (production)
+
+Render runs **Linux** only. **Keep Gunicorn** for the live service — do not change the start command to Waitress for Render.
+
+- Repo-root **`render.yaml`** defines a **Web Service** with `rootDir: model/face_shape_classifier`, `buildCommand: pip install -r requirements.txt`, and `gunicorn api:app --bind 0.0.0.0:$PORT --workers 1`.
+- **`runtime.txt`** pins Python for the build.
+- **`requirements.txt`** includes both **gunicorn** (Render) and **waitress** (optional local Windows testing).
+
+After deploy, point your frontend at `https://<your-service>.onrender.com` for `/health`, `/predict`, `/predict-image`.
+
+---
+
 ## Installation
 
 ### Required Python Version
