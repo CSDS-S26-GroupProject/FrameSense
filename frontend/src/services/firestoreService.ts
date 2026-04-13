@@ -10,6 +10,11 @@ import {
   Timestamp,
 } from 'firebase/firestore'
 
+function getDb() {
+  if (!db) throw new Error('Firestore is not initialized — check your Firebase config.')
+  return db
+}
+
 // ===== USER PROFILE OPERATIONS =====
 
 interface UserProfileData {
@@ -24,7 +29,7 @@ interface UserProfileData {
 export async function saveUserProfile(uid: string, userData: UserProfileData) {
   try {
     await setDoc(
-      doc(db, 'users', uid),
+      doc(getDb(), 'users', uid),
       {
         ...userData,
         createdAt: Timestamp.now(),
@@ -40,7 +45,7 @@ export async function saveUserProfile(uid: string, userData: UserProfileData) {
 
 export async function getUserProfile(uid: string) {
   try {
-    const docSnap = await getDoc(doc(db, 'users', uid))
+    const docSnap = await getDoc(doc(getDb(), 'users', uid))
     return docSnap.exists() ? docSnap.data() : null
   } catch (error) {
     console.error('Error getting user profile:', error)
@@ -50,7 +55,7 @@ export async function getUserProfile(uid: string) {
 
 export async function updateUserProfile(uid: string, updates: Partial<UserProfileData>) {
   try {
-    await updateDoc(doc(db, 'users', uid), {
+    await updateDoc(doc(getDb(), 'users', uid), {
       ...updates,
       lastLoginAt: Timestamp.now(),
     })
@@ -83,7 +88,7 @@ interface FitSessionWithId extends FitSessionData {
 
 export async function saveFitSession(uid: string, sessionData: FitSessionData) {
   try {
-    const sessionsRef = collection(db, 'users', uid, 'fitSessions')
+    const sessionsRef = collection(getDb(), 'users', uid, 'fitSessions')
     const docRef = await addDoc(sessionsRef, {
       ...sessionData,
       timestamp: Timestamp.now(),
@@ -97,7 +102,7 @@ export async function saveFitSession(uid: string, sessionData: FitSessionData) {
 
 export async function getUserFitSessions(uid: string): Promise<FitSessionWithId[]> {
   try {
-    const sessionsRef = collection(db, 'users', uid, 'fitSessions')
+    const sessionsRef = collection(getDb(), 'users', uid, 'fitSessions')
     const querySnapshot = await getDocs(sessionsRef)
     const sessions = querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -138,7 +143,7 @@ interface GlassesFrameData {
 
 export async function getGlassesCatalog() {
   try {
-    const framesRef = collection(db, 'glassesFrames')
+    const framesRef = collection(getDb(), 'glassesFrames')
     const querySnapshot = await getDocs(framesRef)
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -152,7 +157,7 @@ export async function getGlassesCatalog() {
 
 export async function getGlassesById(frameId: string) {
   try {
-    const docSnap = await getDoc(doc(db, 'glassesFrames', frameId))
+    const docSnap = await getDoc(doc(getDb(), 'glassesFrames', frameId))
     return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null
   } catch (error) {
     console.error('Error getting glasses by ID:', error)
@@ -162,7 +167,7 @@ export async function getGlassesById(frameId: string) {
 
 export async function addGlassesToCatalog(frameId: string, glassesData: GlassesFrameData) {
   try {
-    await setDoc(doc(db, 'glassesFrames', frameId), glassesData)
+    await setDoc(doc(getDb(), 'glassesFrames', frameId), glassesData)
   } catch (error) {
     console.error('Error adding glasses to catalog:', error)
     throw error
@@ -179,7 +184,7 @@ export async function updateUserPreferences(
   }
 ) {
   try {
-    await updateDoc(doc(db, 'users', uid), {
+    await updateDoc(doc(getDb(), 'users', uid), {
       preferences,
     })
   } catch (error) {

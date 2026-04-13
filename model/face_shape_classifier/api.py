@@ -1,21 +1,24 @@
+import os
+import tempfile
+from pathlib import Path
+
+import cv2
+import joblib
 import mediapipe as mp
+import numpy as np
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision as mp_vision
 from werkzeug.utils import secure_filename
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import joblib
-import numpy as np
-import os
-import cv2
 
+# Resolve next to this file so Mac / Windows / Linux all work (no hardcoded drives).
+_MODEL_DIR = Path(__file__).resolve().parent
+MODEL_FILE = str(_MODEL_DIR / "face_shape_model.pkl")
+LANDMARKER_PATH = str(_MODEL_DIR / "face_landmarker.task")
 
 app = Flask(__name__)
 CORS(app)  # allows the React frontend (localhost:5173) to call this API
-
-#Loading the model
-MODEL_FILE = "face_shape_model.pkl"
-MODEL_FILE = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_shape_model.pkl"
 
 if not os.path.exists(MODEL_FILE):
     raise FileNotFoundError(
@@ -89,48 +92,43 @@ def predict():
 
         landmarks_raw = body['landmarks']
 
-        # validate shape
-        landmarks = np.array(landmarks_raw, dtype=np.float32)
+        # handle both [{x,y,z}, ...] and [[x,y,z], ...] formats
+        if isinstance(landmarks_raw[0], dict):
+            # frontend sends {x, y, z} objects
+            landmarks = np.array(
+                [[lm['x'], lm['y'], lm['z']] for lm in landmarks_raw],
+                dtype=np.float32
+            )
+        else:
+            # already an array format
+            landmarks = np.array(landmarks_raw, dtype=np.float32)
+
         if landmarks.shape[0] < 468:
             return jsonify({
                 'error': f'Expected 468 landmarks, got {landmarks.shape[0]}'
             }), 400
 
-        # extract features — same pipeline as training
         features = compute_full_features(landmarks)
-
-        # predict
         shape = model.predict([features])[0]
-
-        # probabilities (requires probability=True on the SVM, which it has)
         probs = model.predict_proba([features])[0]
         prob_dict = {
             cls: round(float(p), 4)
             for cls, p in zip(model.classes_, probs)
         }
 
-        confidence = round(float(max(probs)), 4)
-
         return jsonify({
             'faceShape':     shape,
-            'confidence':    confidence,
+            'confidence':    round(float(max(probs)), 4),
             'probabilities': prob_dict
         })
 
     except Exception as e:
+        print(f"[/predict error]: {e}")  # prints full error to Python terminal
         return jsonify({ 'error': str(e) }), 500
 
 
-import cv2
-import mediapipe as mp
-from mediapipe.tasks import python as mp_python
-from mediapipe.tasks.python import vision as mp_vision
-from werkzeug.utils import secure_filename
-import tempfile
-
 _landmarker = None
 
-LANDMARKER_PATH = "D:\\Coding Stuff\\GitHub\\sernior project\\FrameSense\\model\\face_shape_classifier\\face_landmarker.task"
 
 def get_landmarker():
     """Lazy-load the MediaPipe landmarker (only once)."""
