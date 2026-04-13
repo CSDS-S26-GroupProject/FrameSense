@@ -15,11 +15,6 @@ dist-ssr
 .env.local
 .env.*.local
 
-# Firebase Admin SDK keys (use FIREBASE_SERVICE_ACCOUNT_PATH — never commit)
-**/serviceAccount*.json
-firebase-adminsdk*.json
-firebase-sa.json
-
 # pnpm
 .pnpm-store
 pnpm-lock.yaml
@@ -29,22 +24,8 @@ pnpm-lock.yaml
 !.vscode/extensions.json
 .idea
 .DS_Store
-Thumbs.db
-Desktop.ini
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-# Python virtualenvs
-.venv/
-venv/
-ENV/
-
-# Training / image datasets (host on R2 or similar; thousands of files slow git)
-dataset/
-model/face_shape_classifier/FaceShape Dataset/
-
-# Playwright debug HTML dumps
-warby_debug.html
