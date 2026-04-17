@@ -217,8 +217,9 @@ def predict_image():
 
 
 if __name__ == '__main__':
-    print("Starting FrameSense Face Shape API on http://localhost:5000")
+    # Port 5000 collides with macOS AirPlay Receiver on recent macOS versions.
+    print("Starting FrameSense Face Shape API on http://localhost:5001")
     print("Endpoints:")
     print("  GET  /health   — check the API is running")
     print("  POST /predict  — predict face shape from 468 landmarks")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

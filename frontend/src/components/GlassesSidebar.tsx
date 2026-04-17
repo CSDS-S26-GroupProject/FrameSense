@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useFSStore } from '../store/useFSStore'
 import styleMappings from '../data/frame_style_mappings.json'
 
@@ -14,20 +15,15 @@ export default function GlassesSidebar() {
     const catalog = useFSStore((s) => s.catalog)
     const selectedId = useFSStore((s) => s.selectedGlassesId)
     const selectGlasses = useFSStore((s) => s.selectGlasses)
-    const faceShape    = useFSStore((s) => s.faceShape)
+    const faceShape = useFSStore((s) => s.faceShape)
+    const [showAll, setShowAll] = useState(false)
 
-    //sorted is the sorting for whether or not a user's face shape has been analyzed
-    //if faceShape exists, sort the recommended frames by the style 
-    //if no faceShape, keep standard catalog order
-    const sorted = faceShape
-        ? [...catalog].sort((a, b) => {
-            const aMatch = isRecommended(a.style, faceShape) ? -1 : 1
-            const bMatch = isRecommended(b.style, faceShape) ? -1 : 1
-            return aMatch - bMatch
-        })
-        : catalog
+    const recommended = faceShape ? catalog.filter((f) => isRecommended(f.style, faceShape)) : []
+    const other = faceShape ? catalog.filter((f) => !isRecommended(f.style, faceShape)) : catalog
 
-       return (
+    const visible = faceShape && !showAll ? recommended : [...recommended, ...other]
+
+    return (
         <aside className="sidebar">
             <div className="sidebar-header">
                 Frames
@@ -36,15 +32,15 @@ export default function GlassesSidebar() {
                         fontWeight: 'normal',
                         marginLeft: '0.5rem',
                         color: 'var(--text-secondary)',
-                        textTransform: 'capitalize'
+                        textTransform: 'capitalize',
                     }}>
-                        · {faceShape} face
+                        · for {faceShape} face
                     </span>
                 )}
             </div>
             <div className="glasses-list">
-                {sorted.map((frame) => {
-                    const recommended = isRecommended(frame.style, faceShape)
+                {visible.map((frame) => {
+                    const rec = isRecommended(frame.style, faceShape)
                     return (
                         <button
                             key={frame.id}
@@ -59,19 +55,30 @@ export default function GlassesSidebar() {
                                 <span className="glass-meta">
                                     {frame.style} · {frame.colors[0]}
                                 </span>
-                                {recommended && (
+                                {rec && (
                                     <span style={{
                                         fontSize: '0.7rem',
                                         color: 'var(--fit-good, #4ade80)',
                                         fontWeight: 600,
                                     }}>
-                                        ✓ Recommended for {faceShape} face
+                                        ✓ Recommended
                                     </span>
                                 )}
                             </div>
                         </button>
                     )
                 })}
+
+                {faceShape && !showAll && other.length > 0 && (
+                    <button className="view-more-btn" onClick={() => setShowAll(true)}>
+                        View more ({other.length})
+                    </button>
+                )}
+                {faceShape && showAll && other.length > 0 && (
+                    <button className="view-more-btn" onClick={() => setShowAll(false)}>
+                        Show less
+                    </button>
+                )}
             </div>
         </aside>
     )
