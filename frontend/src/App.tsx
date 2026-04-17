@@ -1,59 +1,41 @@
 // frontend/src/App.tsx
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import './App.css'
 import { useMediaPipe } from './hooks/useMediaPipe'
+import { useAutoFaceShape } from './hooks/useAutoFaceShape'
+import { useFSStore } from './store/useFSStore'
 import CameraFeed from './components/CameraFeed'
 import GlassesSidebar from './components/GlassesSidebar'
-import DistanceIndicator from './components/DistanceIndicator'
-import FaceShapeAnalyzer from './components/FaceShapeAnalyzer'
-
 
 function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
   useMediaPipe(videoRef)
+  const { status, rescan } = useAutoFaceShape(videoRef)
+  const faceShape = useFSStore((s) => s.faceShape)
 
-  const [showAnalyzer, setShowAnalyzer] = useState(false)
+  let label: string
+  if (faceShape) label = `Detected: ${faceShape} face`
+  else if (status === 'detecting') label = 'Looking for your face…'
+  else if (status === 'capturing') label = 'Analyzing…'
+  else if (status === 'error') label = "Couldn't detect — try rescan"
+  else label = ''
 
   return (
-    <>
-      {/* Main app — always mounted, camera never stops */}
-      <div className="app" style={{ visibility: showAnalyzer ? 'hidden' : 'visible' }}>
-        <header className="app-header">
-          <h1>FrameSense</h1>
-          <button
-            onClick={() => setShowAnalyzer(true)}
-            style={{
-              marginLeft: 'auto',
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              color: '#fff',
-              padding: '0.45rem 1rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.82rem',
-              fontFamily: 'inherit',
-              fontWeight: 500,
-              letterSpacing: '0.01em',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-            }}
-          >
-            🔍 Find your face shape
+    <div className="app">
+      <header className="app-header">
+        <h1>FrameSense</h1>
+        <div className="face-shape-chip">
+          <span className="face-shape-chip-label">{label}</span>
+          <button onClick={rescan} className="rescan-btn" title="Rescan face shape">
+            ↻ Rescan
           </button>
-        </header>
-        <main className="app-main">
-          <CameraFeed videoRef={videoRef} />
-          <GlassesSidebar />
-          <DistanceIndicator />
-        </main>
-      </div>
-
-      {/* Analyzer — overlaid on top when active */}
-      {showAnalyzer && (
-        <FaceShapeAnalyzer onBack={() => setShowAnalyzer(false)} />
-      )}
-    </>
+        </div>
+      </header>
+      <main className="app-main">
+        <CameraFeed videoRef={videoRef} />
+        <GlassesSidebar />
+      </main>
+    </div>
   )
 }
 
