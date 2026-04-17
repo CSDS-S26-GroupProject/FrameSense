@@ -1,5 +1,6 @@
 import { useFSStore } from '../store/useFSStore'
 import JeelizVTOCanvas from './JeelizVTOCanvas'
+import PartnerStoresOverlay from './PartnerStoresOverlay'
 
 
 interface CameraFeedProps {
@@ -38,6 +39,8 @@ export default function CameraFeed({ videoRef }: CameraFeedProps) {
                     <span className="fit-max">/ 100</span>
                 </div>
             )}
+
+            <PartnerStoresOverlay />
         </div>
     )
 }

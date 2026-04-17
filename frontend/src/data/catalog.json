@@ -8,7 +8,15 @@
         "templeLengthMm": 140,
         "colors": ["gold", "green"],
         "recommendedShapes": ["oval", "round", "square"],
-        "jeelizSku": "rayban_aviator_or_vertFlash"
+        "jeelizSku": "rayban_aviator_or_vertFlash",
+        "partners": [
+            { "name": "MOSCOT", "url": "https://moscot.com/", "location": "NYC, since 1915" },
+            { "name": "Fabulous Fanny's", "url": "https://fabulousfannysnyc.com/", "location": "NYC · vintage" },
+            { "name": "Old Focals", "url": "https://oldfocals.com/", "location": "Pasadena, CA" },
+            { "name": "Maison Bonnet", "url": "https://www.maisonbonnet.com/en", "location": "Paris · bespoke" },
+            { "name": "L.G.R.", "url": "https://www.lgrworld.com/", "location": "Italy · handmade" },
+            { "name": "Ed & Sarna", "url": "https://edandsarna.com/", "location": "UK · vintage" }
+        ]
     },
     {
         "id": "rb-aviator-gun",
@@ -19,7 +27,14 @@
         "templeLengthMm": 140,
         "colors": ["gunmetal", "green"],
         "recommendedShapes": ["oval", "round", "square"],
-        "jeelizSku": "rayban_aviator_gun_vert"
+        "jeelizSku": "rayban_aviator_gun_vert",
+        "partners": [
+            { "name": "MOSCOT", "url": "https://moscot.com/", "location": "NYC, since 1915" },
+            { "name": "Old Focals", "url": "https://oldfocals.com/", "location": "Pasadena, CA" },
+            { "name": "Article One", "url": "https://articleoneeyewear.com/", "location": "Flint, MI" },
+            { "name": "L.G.R.", "url": "https://www.lgrworld.com/", "location": "Italy · handmade" },
+            { "name": "Ed & Sarna", "url": "https://edandsarna.com/", "location": "UK · vintage" }
+        ]
     },
     {
         "id": "rb-wayfarer-havana",
@@ -30,7 +45,15 @@
         "templeLengthMm": 145,
         "colors": ["havana", "green"],
         "recommendedShapes": ["oval", "square", "heart"],
-        "jeelizSku": "rayban_wayfarer_havane_vert"
+        "jeelizSku": "rayban_wayfarer_havane_vert",
+        "partners": [
+            { "name": "MOSCOT", "url": "https://moscot.com/", "location": "NYC, since 1915" },
+            { "name": "AKILA", "url": "https://akila.la/", "location": "Los Angeles" },
+            { "name": "Article One", "url": "https://articleoneeyewear.com/", "location": "Flint, MI" },
+            { "name": "Kaneko Optical", "url": "https://www.kaneko-optical.co.jp/en/", "location": "Sabae, Japan" },
+            { "name": "Charlie Max Milano", "url": "https://www.charliemaxmilano.com/", "location": "Milan, Italy" },
+            { "name": "IOLLA", "url": "https://iolla.com/", "location": "Glasgow, Scotland" }
+        ]
     },
     {
         "id": "rb-round-copper",
@@ -41,7 +64,13 @@
         "templeLengthMm": 145,
         "colors": ["copper", "pink"],
         "recommendedShapes": ["square"],
-        "jeelizSku": "rayban_round_cuivre_pinkBrownDegrade"
+        "jeelizSku": "rayban_round_cuivre_pinkBrownDegrade",
+        "partners": [
+            { "name": "MOSCOT", "url": "https://moscot.com/", "location": "NYC, since 1915" },
+            { "name": "Old Focals", "url": "https://oldfocals.com/", "location": "Pasadena, CA" },
+            { "name": "AHLEM", "url": "https://www.ahlemeyewear.com/", "location": "Venice, CA / Oyonnax, FR" },
+            { "name": "Monkeyglasses", "url": "https://www.monkeyglasses.com/", "location": "Copenhagen, Denmark" }
+        ]
     },
     {
         "id": "rb-round-gold",
@@ -52,7 +81,14 @@
         "templeLengthMm": 145,
         "colors": ["gold", "green"],
         "recommendedShapes": ["square"],
-        "jeelizSku": "rayban_round_or_vert"
+        "jeelizSku": "rayban_round_or_vert",
+        "partners": [
+            { "name": "MOSCOT", "url": "https://moscot.com/", "location": "NYC, since 1915" },
+            { "name": "Fabulous Fanny's", "url": "https://fabulousfannysnyc.com/", "location": "NYC · vintage" },
+            { "name": "The Vintage Optical Shop", "url": "https://vintageopticalshop.com/", "location": "Brooklyn · 1850s–1980s" },
+            { "name": "Shwood Eyewear", "url": "https://shwoodshop.com/", "location": "Portland, OR · wood" },
+            { "name": "AHLEM", "url": "https://www.ahlemeyewear.com/", "location": "Venice, CA / Oyonnax, FR" }
+        ]
     },
     {
         "id": "rb-clubmaster",
@@ -63,7 +99,14 @@
         "templeLengthMm": 140,
         "colors": ["black", "copper"],
         "recommendedShapes": ["oval", "square", "heart"],
-        "jeelizSku": "rayban_clubround_noir_cuivre_flash"
+        "jeelizSku": "rayban_clubround_noir_cuivre_flash",
+        "partners": [
+            { "name": "MOSCOT", "url": "https://moscot.com/", "location": "NYC, since 1915" },
+            { "name": "Article One", "url": "https://articleoneeyewear.com/", "location": "Flint, MI" },
+            { "name": "Old Focals", "url": "https://oldfocals.com/", "location": "Pasadena, CA" },
+            { "name": "Opticianado", "url": "https://www.opticianado.com/", "location": "Toronto, Canada" },
+            { "name": "Ed & Sarna", "url": "https://edandsarna.com/", "location": "UK · vintage" }
+        ]
     },
     {
         "id": "rb-erika",
@@ -74,7 +117,13 @@
         "templeLengthMm": 140,
         "colors": ["brown", "silver"],
         "recommendedShapes": ["square", "heart"],
-        "jeelizSku": "rayban_erika_marronArgent_marronVioletDegrade"
+        "jeelizSku": "rayban_erika_marronArgent_marronVioletDegrade",
+        "partners": [
+            { "name": "AHLEM", "url": "https://www.ahlemeyewear.com/", "location": "Venice, CA / Oyonnax, FR" },
+            { "name": "Charlie Max Milano", "url": "https://www.charliemaxmilano.com/", "location": "Milan, Italy" },
+            { "name": "L.G.R.", "url": "https://www.lgrworld.com/", "location": "Italy · handmade" },
+            { "name": "Pacifico Optical", "url": "https://www.pacificooptical.com/", "location": "Bondi Beach, Australia" }
+        ]
     },
     {
         "id": "carrera-113s",
@@ -85,7 +134,14 @@
         "templeLengthMm": 145,
         "colors": ["gold", "green"],
         "recommendedShapes": ["oval", "round", "heart"],
-        "jeelizSku": "carrera_113S_gold_green"
+        "jeelizSku": "carrera_113S_gold_green",
+        "partners": [
+            { "name": "AKILA", "url": "https://akila.la/", "location": "Los Angeles" },
+            { "name": "FUNK Eyewear", "url": "https://funkeyewear.com/en", "location": "Bavaria, Germany" },
+            { "name": "Spectacle PDX", "url": "https://spectaclepdx.com/", "location": "Portland, OR" },
+            { "name": "Santa Fe Optical", "url": "https://santafeoptical.com/", "location": "Austin, TX" },
+            { "name": "Breezm", "url": "https://breezmeyewear.com/", "location": "South Korea · 3D-printed" }
+        ]
     },
     {
         "id": "oakley-holbrook",
@@ -96,7 +152,15 @@
         "templeLengthMm": 140,
         "colors": ["black", "gray"],
         "recommendedShapes": ["oval", "round"],
-        "jeelizSku": "holbrook_black_gray"
+        "jeelizSku": "holbrook_black_gray",
+        "partners": [
+            { "name": "AKILA", "url": "https://akila.la/", "location": "Los Angeles" },
+            { "name": "Shwood Eyewear", "url": "https://shwoodshop.com/", "location": "Portland, OR · wood" },
+            { "name": "Proof Eyewear", "url": "https://www.iwantproof.com/", "location": "Boise, ID" },
+            { "name": "Pala Eyewear", "url": "https://palaeyewear.com/", "location": "UK · sustainable" },
+            { "name": "IOLLA", "url": "https://iolla.com/", "location": "Glasgow, Scotland" },
+            { "name": "Spectacle PDX", "url": "https://spectaclepdx.com/", "location": "Portland, OR" }
+        ]
     },
     {
         "id": "oakley-frogskins",
@@ -107,7 +171,13 @@
         "templeLengthMm": 140,
         "colors": ["black", "brown"],
         "recommendedShapes": ["oval", "round"],
-        "jeelizSku": "frogskins_black_brown"
+        "jeelizSku": "frogskins_black_brown",
+        "partners": [
+            { "name": "AKILA", "url": "https://akila.la/", "location": "Los Angeles" },
+            { "name": "Proof Eyewear", "url": "https://www.iwantproof.com/", "location": "Boise, ID" },
+            { "name": "Shwood Eyewear", "url": "https://shwoodshop.com/", "location": "Portland, OR · wood" },
+            { "name": "Pala Eyewear", "url": "https://palaeyewear.com/", "location": "UK · sustainable" }
+        ]
     },
     {
         "id": "persol-0649",
@@ -118,7 +188,14 @@
         "templeLengthMm": 140,
         "colors": ["havana", "green"],
         "recommendedShapes": ["square", "heart"],
-        "jeelizSku": "persol_PO0649_havana_green"
+        "jeelizSku": "persol_PO0649_havana_green",
+        "partners": [
+            { "name": "AHLEM", "url": "https://www.ahlemeyewear.com/", "location": "Venice, CA / Oyonnax, FR" },
+            { "name": "L.G.R.", "url": "https://www.lgrworld.com/", "location": "Italy · handmade" },
+            { "name": "Charlie Max Milano", "url": "https://www.charliemaxmilano.com/", "location": "Milan, Italy" },
+            { "name": "Opticianado", "url": "https://www.opticianado.com/", "location": "Toronto, Canada" },
+            { "name": "Framed Ewe Optical", "url": "https://framedewe.com/", "location": "LA & Phoenix" }
+        ]
     },
     {
         "id": "cat-eye-classic",
@@ -129,7 +206,14 @@
         "templeLengthMm": 138,
         "colors": ["black", "red"],
         "recommendedShapes": ["oval", "square", "heart"],
-        "jeelizSku": "aliexpress_cateye01_black_red"
+        "jeelizSku": "aliexpress_cateye01_black_red",
+        "partners": [
+            { "name": "Fabulous Fanny's", "url": "https://fabulousfannysnyc.com/", "location": "NYC · vintage" },
+            { "name": "Vontélle Eyewear", "url": "https://www.vontelle.com/", "location": "NYC · inclusive fit" },
+            { "name": "AHLEM", "url": "https://www.ahlemeyewear.com/", "location": "Venice, CA / Oyonnax, FR" },
+            { "name": "The Vintage Optical Shop", "url": "https://vintageopticalshop.com/", "location": "Brooklyn · 1850s–1980s" },
+            { "name": "Penny Rose Optical", "url": "https://pennyroseoptical.com/", "location": "Miami · custom" }
+        ]
     },
     {
         "id": "blaze-hexagonal",
@@ -140,6 +224,11 @@
         "templeLengthMm": 140,
         "colors": ["black", "purple"],
         "recommendedShapes": ["oval"],
-        "jeelizSku": "blaze_hexagonal_noir_violetbleumiroir"
+        "jeelizSku": "blaze_hexagonal_noir_violetbleumiroir",
+        "partners": [
+            { "name": "Breezm", "url": "https://breezmeyewear.com/", "location": "South Korea · 3D-printed" },
+            { "name": "FUNK Eyewear", "url": "https://funkeyewear.com/en", "location": "Bavaria, Germany" },
+            { "name": "Framed Ewe Optical", "url": "https://framedewe.com/", "location": "LA & Phoenix" }
+        ]
     }
 ]

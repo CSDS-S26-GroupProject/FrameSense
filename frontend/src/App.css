@@ -192,7 +192,7 @@
 
 .fit-badge {
   position: absolute;
-  bottom: 2.5rem;
+  top: 1.5rem;
   left: 2.5rem;
   display: flex;
   align-items: baseline;
@@ -235,6 +235,110 @@
 
 .fit-poor {
   color: var(--fit-poor);
+}
+
+/* ---- Partner Stores Overlay ---- */
+
+.partners-overlay {
+  position: absolute;
+  left: 1.5rem;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  z-index: 2;
+}
+
+.partners-overlay-empty {
+  justify-content: center;
+  align-items: center;
+  padding: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
+}
+
+.partners-cards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.partner-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.partner-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.partner-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.partner-location {
+  font-size: 0.72rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.partner-cta {
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--accent, #7dd3fc);
+  letter-spacing: 0.02em;
+}
+
+.partners-arrow {
+  flex-shrink: 0;
+  width: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.3rem;
+  font-family: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+.partners-arrow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.partners-arrow:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
 }
 
 /* ---- Glasses Sidebar ---- */
