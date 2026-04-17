@@ -1,6 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getAuth, type Auth } from 'firebase/auth'
-import { getFirestore, type Firestore } from 'firebase/firestore'
+import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore'
 import { getAnalytics, type Analytics } from 'firebase/analytics'
 
 const firebaseConfig = {
@@ -17,11 +17,20 @@ let app: FirebaseApp | null = null
 let auth: Auth | null = null
 let db: Firestore | null = null
 let analytics: Analytics | null = null
+const useFirestoreEmulator = import.meta.env.VITE_USE_FIRESTORE_EMULATOR === 'true'
+const firestoreEmulatorHost = import.meta.env.VITE_FIRESTORE_EMULATOR_HOST || '127.0.0.1'
+const firestoreEmulatorPort = Number(import.meta.env.VITE_FIRESTORE_EMULATOR_PORT || 8080)
 
 if (firebaseConfig.projectId) {
   app = initializeApp(firebaseConfig)
   auth = getAuth(app)
   db = getFirestore(app)
+  if (useFirestoreEmulator) {
+    connectFirestoreEmulator(db, firestoreEmulatorHost, firestoreEmulatorPort)
+    console.info(
+      `Firestore emulator enabled at ${firestoreEmulatorHost}:${firestoreEmulatorPort}; cloud Firestore is disabled for this session.`
+    )
+  }
   if (firebaseConfig.measurementId) {
     analytics = getAnalytics(app)
   }
