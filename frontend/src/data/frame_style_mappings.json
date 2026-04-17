@@ -1,0 +1,75 @@
+{
+  "cat_eye": {
+    "compatibleFaceShapes": [
+      "oval",
+      "square",
+      "heart",
+      "diamond"
+    ],
+    "description": "Upswept outer edges, retro-inspired frame"
+  },
+  "rectangle": {
+    "compatibleFaceShapes": [
+      "oval",
+      "round",
+      "heart"
+    ],
+    "description": "Wide rectangular lenses with angular corners"
+  },
+  "wayfarer": {
+    "compatibleFaceShapes": [
+      "oval",
+      "square",
+      "heart",
+      "diamond"
+    ],
+    "description": "Trapezoidal plastic frame, wider at the top"
+  },
+  "square": {
+    "compatibleFaceShapes": [
+      "oval",
+      "round",
+      "diamond"
+    ],
+    "description": "Equal-width angular lenses with sharp corners"
+  },
+  "aviator": {
+    "compatibleFaceShapes": [
+      "oval",
+      "round",
+      "square",
+      "diamond"
+    ],
+    "description": "Teardrop-shaped lenses with thin metal frame"
+  },
+  "geometric": {
+    "compatibleFaceShapes": [
+      "oval",
+      "diamond"
+    ],
+    "description": "Hexagonal, octagonal, or other non-traditional lens shapes"
+  },
+  "browline": {
+    "compatibleFaceShapes": [
+      "oval",
+      "square",
+      "heart"
+    ],
+    "description": "Bold upper frame mimicking the brow line, thin lower rim"
+  },
+  "round": {
+    "compatibleFaceShapes": [
+      "square",
+      "diamond"
+    ],
+    "description": "Circular lenses with smooth curves"
+  },
+  "oval": {
+    "compatibleFaceShapes": [
+      "square",
+      "heart",
+      "diamond"
+    ],
+    "description": "Egg-shaped lenses, slightly wider than tall"
+  }
+}
