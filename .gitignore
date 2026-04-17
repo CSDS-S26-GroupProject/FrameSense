@@ -19,6 +19,10 @@ dist-ssr
 .pnpm-store
 pnpm-lock.yaml
 
+# ML datasets
+model/face_shape_classifier/dataset/
+dataset/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

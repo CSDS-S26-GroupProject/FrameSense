@@ -52,7 +52,8 @@ export default function FaceShapeAnalyzer({ onBack }: FaceShapeAnalyzerProps) {
             const formData = new FormData()
             formData.append('image', file)
 
-            const res = await fetch('http://localhost:5000/predict-image', {
+            const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
+            const res = await fetch(`${apiUrl}/predict-image`, {
                 method: 'POST',
                 body: formData,
             })

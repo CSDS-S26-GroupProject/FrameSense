@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: framesense-backend
+    runtime: python
+    rootDir: model/face_shape_classifier
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn api:app --bind 0.0.0.0:$PORT --workers 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.9
+
+  - type: web
+    name: framesense-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
