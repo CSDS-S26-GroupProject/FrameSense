@@ -1,44 +1,18 @@
-// frontend/src/App.tsx
-import { useRef } from 'react'
-import './App.css'
-import { useMediaPipe } from './hooks/useMediaPipe'
-import { useAutoFaceShape } from './hooks/useAutoFaceShape'
-import { useFitScore } from './hooks/useFitScore'
-import { useFSStore } from './store/useFSStore'
-import CameraFeed from './components/CameraFeed'
-import GlassesSidebar from './components/GlassesSidebar'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Index from './pages/Index'
+import Scan from './pages/Scan'
+import TryOn from './pages/TryOn'
+import NotFound from './pages/NotFound'
 
-function App() {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  useMediaPipe(videoRef)
-  useFitScore()
-  const { status, rescan } = useAutoFaceShape(videoRef)
-  const faceShape = useFSStore((s) => s.faceShape)
-
-  let label: string
-  if (faceShape) label = `Detected: ${faceShape} face`
-  else if (status === 'detecting') label = 'Looking for your face…'
-  else if (status === 'capturing') label = 'Analyzing…'
-  else if (status === 'error') label = "Couldn't detect — try rescan"
-  else label = ''
-
+export default function App() {
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>FrameSense</h1>
-        <div className="face-shape-chip">
-          <span className="face-shape-chip-label">{label}</span>
-          <button onClick={rescan} className="rescan-btn" title="Rescan face shape">
-            ↻ Rescan
-          </button>
-        </div>
-      </header>
-      <main className="app-main">
-        <CameraFeed videoRef={videoRef} />
-        <GlassesSidebar />
-      </main>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/scan" element={<Scan />} />
+        <Route path="/try-on" element={<TryOn />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
-
-export default App

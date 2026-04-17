@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//tmp/frame-discovery-studio/**)",
+      "Read(//private/tmp/frame-discovery-studio/**)",
+      "Bash(npm install *)"
+    ],
+    "additionalDirectories": [
+      "/private/tmp/frame-discovery-studio/src/assets"
+    ]
+  }
+}
