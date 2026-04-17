@@ -27,9 +27,7 @@ export interface GlassesFrame {
     templeLengthMm: number;
     colors: string[];
     recommendedShapes: FaceShape[];
-    modelPath: string;       // path to .glb file
-    thumbnailPath: string;   // path to preview image
-    modelRotationY?: number; // degrees to rotate the GLB around Y so it faces -Z
+    jeelizSku: string;       // SKU in Jeeliz GlassesDB used by the VTO widget
 }
 
 // ----- The Core Data Contract -----

@@ -1,5 +1,5 @@
 import { useFSStore } from '../store/useFSStore'
-import GlassesCanvas from './GlassesCanvas'
+import JeelizVTOCanvas from './JeelizVTOCanvas'
 
 
 interface CameraFeedProps {
@@ -17,16 +17,17 @@ export default function CameraFeed({ videoRef }: CameraFeedProps) {
 
     return (
         <div className="camera-container">
+            {/* Hidden video — still fed by useMediaPipe for Fit Score landmarks. */}
             <video
                 ref={videoRef}
                 autoPlay
                 playsInline
                 muted
-                className="camera-video"
+                className="camera-video-hidden"
             />
 
-            {/* 3D glasses overlay — sits on top of the video */}
-            <GlassesCanvas />
+            {/* Jeeliz owns the visible webcam + AR glasses overlay. */}
+            <JeelizVTOCanvas />
 
             {fitScore !== null && (
                 <div className="fit-badge">
