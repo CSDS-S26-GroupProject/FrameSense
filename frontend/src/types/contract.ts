@@ -24,10 +24,15 @@ export interface PartnerStore {
     location?: string;
 }
 
+export type FrameMaterial = 'acetate' | 'titanium' | 'wood' | 'recycled';
+
 export interface GlassesFrame {
     id: string;
     name: string;
+    maker: string;
     style: string;
+    material: FrameMaterial;
+    priceFrom: number;
     frameWidthMm: number;
     bridgeWidthMm: number;
     templeLengthMm: number;
@@ -62,7 +67,7 @@ export interface FrameSenseState {
     setLandmarks: (landmarks: Point3D[]) => void;
     setHeadPose: (pose: HeadPose) => void;
     setRawTransformMatrix: (m: Float32Array) => void;
-    setFaceShape: (shape: FaceShape) => void;
+    setFaceShape: (shape: FaceShape | null) => void;
 
     // Team 3 actions
     selectGlasses: (id: string) => void;
