@@ -15,6 +15,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [isSignup, setIsSignup] = useState(false)
 
   const handleLogout = async () => {
+    if (!auth) return
     try {
       await signOut(auth)
     } catch (error) {

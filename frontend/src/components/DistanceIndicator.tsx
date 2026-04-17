@@ -6,8 +6,6 @@ export default function DistanceIndicator() {
 
   if (!leftPupil || !rightPupil) return null
 
-  // Average interpupillary distance is ~63mm
-  const REAL_IPD_MM = 63
   // Calibrated at ~0.05 normalized units = ~60cm from camera
   const REFERENCE_DIST = 0.05
   const REFERENCE_CM = 60
