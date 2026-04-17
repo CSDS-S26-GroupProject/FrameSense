@@ -33,6 +33,11 @@ export default function JeelizVTOCanvas() {
       callbackReady: () => console.log('[Jeeliz] widget ready'),
       onError: (errorLabel: string) => console.error('[Jeeliz]', errorLabel),
     })
+
+    return () => {
+      isStartedRef.current = false
+      JEELIZVTOWIDGET.destroy()
+    }
   }, [])
 
   useEffect(() => {
