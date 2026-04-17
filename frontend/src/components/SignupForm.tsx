@@ -21,7 +21,7 @@ export default function SignupForm({ onSuccess }: SignupFormProps) {
     setLoading(true)
 
     try {
-      // Create user in Firebase Auth
+      if (!auth) throw new Error('Firebase is not configured')
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
 

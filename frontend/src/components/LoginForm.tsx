@@ -19,6 +19,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     setLoading(true)
 
     try {
+      if (!auth) throw new Error('Firebase is not configured')
       await signInWithEmailAndPassword(auth, email, password)
       setEmail('')
       setPassword('')
