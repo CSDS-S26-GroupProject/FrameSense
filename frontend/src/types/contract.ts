@@ -18,6 +18,12 @@ export type FaceShape = 'oval' | 'round' | 'square' | 'heart';
 
 // ----- Glasses Catalog -----
 
+export interface PartnerStore {
+    name: string;
+    url: string;
+    location?: string;
+}
+
 export interface GlassesFrame {
     id: string;
     name: string;
@@ -28,6 +34,7 @@ export interface GlassesFrame {
     colors: string[];
     recommendedShapes: FaceShape[];
     jeelizSku: string;       // SKU in Jeeliz GlassesDB used by the VTO widget
+    partners: PartnerStore[];
 }
 
 // ----- The Core Data Contract -----
