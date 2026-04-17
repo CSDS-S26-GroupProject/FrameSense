@@ -51,11 +51,9 @@ export default function GlassesSidebar() {
                             className={`glass-card ${selectedId === frame.id ? 'selected' : ''}`}
                             onClick={() => selectGlasses(frame.id)}
                         >
-                            <img
-                                src={frame.thumbnailPath}
-                                alt={frame.name}
-                                className="glass-thumb"
-                            />
+                            <div className="glass-thumb" aria-hidden="true">
+                                {frame.style.slice(0, 3).toUpperCase()}
+                            </div>
                             <div className="glass-info">
                                 <span className="glass-name">{frame.name}</span>
                                 <span className="glass-meta">
