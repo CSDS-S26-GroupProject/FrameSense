@@ -60,6 +60,17 @@ export default function WebcamView({ className, mirror = true, children, onReady
 
   return (
     <div className={cn('relative overflow-hidden bg-foreground', className)}>
+      {/* Dedicated element for MediaPipe / face-capture when parent passes videoRef.
+          Without this, the ref stays null and the stream is never attached there. */}
+      {externalRef ? (
+        <video
+          ref={externalRef}
+          playsInline
+          muted
+          className="camera-video-hidden"
+          aria-hidden
+        />
+      ) : null}
       <video
         ref={internalRef}
         playsInline

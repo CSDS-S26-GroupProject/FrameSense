@@ -69,7 +69,10 @@ export function useMediaPipe(videoRef: React.RefObject<HTMLVideoElement | null>,
             )
 
             if (results.faceLandmarks?.[0]) {
-                const landmarks = results.faceLandmarks[0] as Point3D[]
+                // MediaPipe may reuse the same landmark array each frame; clone so Zustand
+                // subscribers (e.g. useAutoFaceShape) see a new reference every update.
+                const raw = results.faceLandmarks[0]
+                const landmarks = raw.map((p) => ({ x: p.x, y: p.y, z: p.z })) as Point3D[]
                 setLandmarks(landmarks)
 
                 if (results.facialTransformationMatrixes?.[0]) {
