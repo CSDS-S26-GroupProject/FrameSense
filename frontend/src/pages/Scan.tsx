@@ -41,6 +41,8 @@ const Scan = () => {
 
       <main className="flex-1 pt-16 relative">
         <WebcamView className="absolute inset-0" mirror videoRef={videoRef}>
+          {/* Hidden video element MediaPipe reads from; WebcamView shares its stream here */}
+          <video ref={videoRef} autoPlay playsInline muted className="camera-video-hidden" />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative" style={{ width: 'min(58vh, 380px)', height: 'min(72vh, 480px)' }}>
               <div className="absolute inset-0 rounded-[50%] border border-white/40" />
