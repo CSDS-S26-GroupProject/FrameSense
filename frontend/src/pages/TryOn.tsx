@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RotateCcw } from 'lucide-react'
 import AppHeader from '@/components/AppHeader'
@@ -7,19 +7,14 @@ import FrameDock from '@/components/FrameDock'
 import FitScoreBadge from '@/components/FitScoreBadge'
 import PartnerCardRail from '@/components/PartnerCardRail'
 import { faceShapes, frames, type Frame } from '@/data/frames'
-import { useFitScore } from '@/hooks/useFitScore'
-import { useMediaPipe } from '@/hooks/useMediaPipe'
 import { useFSStore } from '@/store/useFSStore'
+import { estimateFit } from '@/lib/estimateFit'
 import type { FaceShape } from '@/types/contract'
 
 const TryOn = () => {
   const navigate = useNavigate()
-  const videoRef = useRef<HTMLVideoElement>(null)
-  useMediaPipe(videoRef, { acquireStream: true })
-  useFitScore()
 
   const faceShape = useFSStore((s) => s.faceShape)
-  const fitScore = useFSStore((s) => s.fitScore)
   const selectedId = useFSStore((s) => s.selectedGlassesId)
   const selectGlasses = useFSStore((s) => s.selectGlasses)
 
@@ -43,6 +38,7 @@ const TryOn = () => {
 
   const selected: Frame | null = frames.find((f) => f.id === selectedId) ?? frames[0] ?? null
   const shapeForUi: FaceShape = faceShape ?? 'oval'
+  const fitScore = useMemo(() => (selected ? estimateFit(selected, faceShape) : null), [selected, faceShape])
 
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
@@ -51,8 +47,6 @@ const TryOn = () => {
       <main className="flex-1 pt-16 flex min-h-0">
         <section className="relative flex-1 min-w-0 p-4">
           <div className="relative h-full w-full rounded-2xl overflow-hidden shadow-soft bg-[#111]">
-            <video ref={videoRef} autoPlay playsInline muted className="camera-video-hidden" />
-
             <div className="absolute inset-0">
               <JeelizVTOCanvas />
             </div>
